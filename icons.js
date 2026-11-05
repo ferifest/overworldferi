@@ -20,3 +20,21 @@ window.OW_ICONS.extraEntities = {
   'creaking': './assets/extra-items/creaking_heart.png',
   'sniffer': './assets/extra-items/sniffer_egg.png'
 };
+
+// Explicit local sprites for mobs that are absent from the legacy entity atlas.
+Object.assign(window.OW_ICONS.extraEntities, {
+  'armadillo': './assets/extra-entities/armadillo.png',
+  'axolotl': './assets/extra-entities/axolotl.png',
+  'nautilus': './assets/extra-entities/nautilus.png',
+  'zombie-nautilus': './assets/extra-entities/zombie-nautilus.png',
+  'wolf-ashen': './assets/extra-entities/wolf-ashen.png',
+  'wolf-black': './assets/extra-entities/wolf-black.png',
+  'wolf-chestnut': './assets/extra-entities/wolf-chestnut.png',
+  'wolf-pale': './assets/extra-entities/wolf-pale.png',
+  'wolf-rusty': './assets/extra-entities/wolf-rusty.png',
+  'wolf-snowy': './assets/extra-entities/wolf-snowy.png',
+  'wolf-spotted': './assets/extra-entities/wolf-spotted.png',
+  'wolf-striped': './assets/extra-entities/wolf-striped.png',
+  'wolf-woods': './assets/extra-entities/wolf-woods.png'
+});
+window.OW_ICONS.extraInventory['bucket of axolotl'] = './assets/extra-items/bucket_of_axolotl.png';
