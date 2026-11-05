@@ -152,15 +152,17 @@
     .inline-filters button{font-size:13px;padding:8px 13px}
     .inline-world-metric{font-size:12px;padding:7px 10px}
     .tree-viewport{height:calc(100vh - 292px);min-height:440px;max-height:none}
-    .tree-heading{position:absolute;z-index:3;top:13px;left:19px;right:19px;margin:0;padding:0 2px 10px;min-height:47px;align-items:center;border-bottom:1px solid rgba(154,76,91,.20);pointer-events:none}
+    .tree-heading{position:absolute;z-index:3;top:13px;left:19px;right:19px;margin:0;padding:0 2px 0;min-height:47px;align-items:center;border-bottom:0;pointer-events:none}
     .tree-heading h1{font-size:23px}
     .tree-heading>div>span,.tree-status{font-size:12px}
-    .tree-status{padding:0 120px 0 12px;text-align:right}
-    .tree-tools{top:13px;right:13px}
+    .tree-status{padding:0;text-align:right;white-space:nowrap;font-size:11px;color:#8996ab;line-height:1.25}
+    .tree-tools{top:13px;right:13px;display:flex;flex-direction:column;align-items:flex-end;gap:7px}
+    .tree-tool-buttons{display:flex;align-items:center;gap:5px}
+    .tree-viewport.all-mode .tree-status{padding:0;text-align:right}
     .tree-viewport.all-mode:before{animation:none!important}
     .tree-viewport.all-mode{contain:layout paint;will-change:auto}
     .nautilus-entity{image-rendering:auto!important;object-fit:contain}
-    @media(max-width:760px){.redesigned{padding:16px 14px 40px}.tree-viewport{height:calc(100vh - 350px);min-height:360px}.tree-heading{left:13px;right:13px;align-items:flex-start;flex-direction:column;gap:2px}.tree-heading h1{font-size:20px}.tree-status{padding:0;text-align:left}.tree-tools{top:10px;right:10px}}
+    @media(max-width:760px){.redesigned{padding:16px 14px 40px}.tree-viewport{height:calc(100vh - 350px);min-height:360px}.tree-heading{left:13px;right:13px;align-items:flex-start;flex-direction:column;gap:2px}.tree-heading h1{font-size:20px}.tree-status{padding:0;text-align:right;font-size:10px}.tree-tools{top:10px;right:10px;gap:6px}}
     @media(max-width:480px){.tree-viewport{height:calc(100vh - 390px);min-height:320px}.tree-heading{top:10px}.tree-heading h1{font-size:18px}.game-tab{font-size:11px;min-height:52px}.inline-filters button{font-size:10px;padding:7px 8px}}
   </style>
 </head>
@@ -171,7 +173,7 @@
   <div class="progress-track"><span id="progressBar"></span></div>
   <nav class="game-tabs" id="gameTabs" aria-label="Вкладки достижений Minecraft"></nav>
   
-  <section id="treeViewport" class="tree-viewport glass"><div class="tree-heading"><div><h1 id="treeTitle">Дерево достижений</h1><span id="treeCount">126 достижений</span></div><span id="treeStatus" class="tree-status">Загрузи мир, чтобы увидеть прогресс</span></div><div class="tree-tools"><button id="zoomOut" aria-label="Уменьшить">−</button><button id="zoomFit" aria-label="Вписать дерево">⌖</button><button id="zoomIn" aria-label="Увеличить">+</button></div><canvas id="treeCanvas" class="tree-canvas" aria-label="Интерактивное дерево достижений"></canvas><div class="tree-state-legend" aria-hidden="true"><span><i class="locked-dot"></i>Не получено</span><span><i class="started-dot"></i>В процессе</span><span><i class="done-dot"></i>Получено</span></div><div id="treeWelcome" class="tree-welcome">Загрузи папку мира или ZIP — достижения появятся на своих местах.</div></section>
+  <section id="treeViewport" class="tree-viewport glass"><div class="tree-heading"><div><h1 id="treeTitle">Дерево достижений</h1><span id="treeCount">126 достижений</span></div></div><div class="tree-tools"><div class="tree-tool-buttons"><button id="zoomOut" aria-label="Уменьшить">−</button><button id="zoomFit" aria-label="Вписать дерево">⌖</button><button id="zoomIn" aria-label="Увеличить">+</button></div><span id="treeStatus" class="tree-status">Загрузи мир, чтобы увидеть прогресс</span></div><canvas id="treeCanvas" class="tree-canvas" aria-label="Интерактивное дерево достижений"></canvas><div class="tree-state-legend" aria-hidden="true"><span><i class="locked-dot"></i>Не получено</span><span><i class="started-dot"></i>В процессе</span><span><i class="done-dot"></i>Получено</span></div><div id="treeWelcome" class="tree-welcome">Загрузи папку мира или ZIP — достижения появятся на своих местах.</div></section>
   <div class="worldline hidden" id="worldline"><span class="worldicon">◈</span><span id="worldnameProxy"></span><label class="identity">Игрок <input id="playerName" maxlength="16" placeholder="укажите ник" autocomplete="off"></label><span id="playerHint" class="sep"></span></div>
   <section id="statsData" class="hidden"></section><section id="achData" class="hidden"></section>
 </main>
