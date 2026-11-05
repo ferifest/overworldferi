@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1019">
+  <title>Overworld — Minecraft 26.3</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b1019;--panel:rgba(255,255,255,.075);--line:rgba(255,255,255,.11);--muted:#98a3b8;--text:#f3f6fc;--mint:#e15a68;--blue:#a7ccff;--gold:#d83c4c;--rose:#ff9d9d;--green:#77ddb1}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 12% -5%,rgba(94,132,190,.21),transparent 36%),radial-gradient(ellipse at 95% 12%,rgba(125,93,170,.16),transparent 30%),var(--bg);color:var(--text);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.12;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:56px 56px;mask-image:linear-gradient(to bottom,#000,transparent 88%)}
+    button,input{font:inherit}button{color:inherit}.app{max-width:1180px;margin:auto;padding:38px 28px 64px}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:48px}.brand{display:flex;align-items:center;gap:11px;font-size:14px;font-weight:750;letter-spacing:.08em}.brand-mark{width:35px;height:35px;border-radius:12px;display:grid;place-items:center;color:#dfffee;background:linear-gradient(145deg,rgba(225,90,104,.2),rgba(167,44,59,.12));border:1px solid rgba(225,90,104,.25);box-shadow:inset 0 1px rgba(255,255,255,.2)}.brand-mark svg{width:18px}.local-badge{font-size:11px;color:#bac6d8;border:1px solid var(--line);background:rgba(255,255,255,.045);padding:7px 12px;border-radius:99px;display:flex;align-items:center;gap:8px}.dot{width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 10px rgba(225,90,104,.8)}
+    .hero{display:flex;justify-content:space-between;align-items:end;gap:26px;margin-bottom:25px}.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-size:10px;color:var(--mint);font-weight:750}.hero h1{font-size:clamp(32px,5vw,52px);letter-spacing:-.045em;line-height:1.08;margin:8px 0 7px;font-weight:680}.subtitle{color:var(--muted);margin:0;max-width:610px}.upload-wrap{display:flex;align-items:center;gap:12px;flex:0 0 auto}.upload{position:relative;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;gap:9px;border:1px solid rgba(225,90,104,.33);background:linear-gradient(135deg,rgba(225,90,104,.16),rgba(167,44,59,.09));padding:12px 16px;border-radius:15px;font-weight:650;cursor:pointer;box-shadow:inset 0 1px rgba(255,255,255,.16);transition:transform .18s,background .18s}.upload:hover{transform:translateY(-1px);background:rgba(225,90,104,.2)}.upload input{position:absolute;inset:0;width:100%;opacity:0;cursor:pointer}.upload svg{width:17px}.zip-pick{font-size:11px;color:#a5b1c4;cursor:pointer;white-space:nowrap}.zip-pick:hover{color:var(--mint)}.zip-pick input{display:none}
+    .worldline{display:none;align-items:center;flex-wrap:wrap;gap:9px;margin:0 0 22px;color:#c2ccdc;font-size:12px}.worldline.show{display:flex}.worldicon{width:22px;height:22px;border-radius:7px;background:rgba(225,90,104,.11);display:grid;place-items:center;color:var(--mint)}.identity{display:inline-flex;align-items:center;gap:7px}.identity input{width:150px;max-width:42vw;color:var(--text);background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.12);border-radius:9px;padding:5px 9px;font-size:12px;outline:none}.identity input:focus{border-color:rgba(225,90,104,.5)}.sep{color:#66748b}
+    .tabs{display:flex;gap:7px;border-bottom:1px solid var(--line);margin-bottom:20px}.tab{position:relative;border:0;background:transparent;color:#929db2;padding:12px 16px;cursor:pointer;font-weight:650;transition:color .18s}.tab:hover{color:#dce4f0}.tab.active{color:var(--text)}.tab.active:after{content:"";position:absolute;bottom:-1px;left:14px;right:14px;height:2px;background:var(--mint);border-radius:3px;box-shadow:0 0 12px rgba(225,90,104,.4)}.tab .count{font-size:10px;color:#9ca9bd;margin-left:6px}
+    .glass{background:linear-gradient(145deg,rgba(255,255,255,.085),rgba(255,255,255,.04));border:1px solid var(--line);border-radius:22px;box-shadow:0 16px 46px rgba(0,0,0,.13),inset 0 1px rgba(255,255,255,.07);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}.empty{padding:44px 24px;text-align:center}.empty .cube{margin:0 auto 16px;width:54px;height:54px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.04);display:grid;place-items:center;color:var(--mint);font-size:22px}.empty h2{font-size:16px;margin:0 0 6px}.empty p{color:var(--muted);max-width:515px;margin:0 auto;font-size:13px}.empty .hint{margin-top:16px;color:#7d899e;font-size:11px}.hidden{display:none!important}
+    .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:17px}.metric{padding:18px 19px;min-height:119px}.metric-head{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:11px}.metric-icon{width:29px;height:29px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.055);color:var(--mint);font-size:14px}.metric strong{display:block;font-size:27px;letter-spacing:-.045em;margin-top:10px;font-weight:680}.metric small{color:#8f9bb0;font-size:10px}.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.list-panel{padding:19px 20px}.list-panel h3{font-size:13px;margin:0 0 10px;color:#d9e1ed}.rows{display:flex;flex-direction:column}.row{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:9px 0;border-top:1px solid rgba(255,255,255,.055)}.row:first-child{border-top:0}.row-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:#d2dbe8}.row-value{font-size:11px;color:#a7b3c6;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .overview{padding:22px 25px;display:grid;grid-template-columns:155px 1fr;gap:22px;align-items:center;margin-bottom:15px}.ringbox{display:grid;place-items:center}.ring{--progress:0deg;width:130px;height:130px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--mint) var(--progress),rgba(255,255,255,.08) 0);box-shadow:0 0 26px rgba(225,90,104,.08)}.ring:before{content:"";position:absolute;inset:7px;background:#111722;border-radius:50%;border:1px solid rgba(255,255,255,.065)}.ringtext{position:relative;text-align:center}.ringtext strong{font-size:30px;display:block;letter-spacing:-.05em}.ringtext span{font-size:9px;color:var(--muted)}.overview-copy h2{font-size:17px;margin:0 0 5px}.overview-copy p{margin:0;color:var(--muted);max-width:680px;font-size:12px}.bar{height:5px;margin-top:16px;border-radius:8px;overflow:hidden;background:rgba(255,255,255,.08)}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--blue));border-radius:8px;transition:width .4s}.barlabel{display:flex;justify-content:space-between;gap:12px;margin-top:7px;color:#8793a8;font-size:10px}.category-bars{display:flex;gap:4px;margin-top:12px}.category-bars span{height:3px;flex:1;background:rgba(255,255,255,.1);border-radius:5px;overflow:hidden}.category-bars i{display:block;height:100%;background:rgba(225,90,104,.72);border-radius:5px}
+    .section-head{display:flex;justify-content:space-between;align-items:center;margin:24px 1px 11px}.section-head h2{font-size:15px;margin:0;font-weight:680}.section-head>span{font-size:11px;color:var(--muted)}.browser-tools{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center;padding:14px 15px;margin-bottom:12px}.category-filters,.state-filters{display:flex;gap:6px;flex-wrap:wrap}.filter{border:1px solid rgba(255,255,255,.1);color:#a8b4c7;background:rgba(255,255,255,.035);border-radius:99px;padding:6px 10px;font-size:10px;cursor:pointer;transition:background .16s,border .16s,color .16s}.filter:hover{border-color:rgba(255,255,255,.22)}.filter.active{color:var(--mint);border-color:rgba(225,90,104,.3);background:rgba(225,90,104,.085)}.filter .n{opacity:.65;margin-left:4px}.search{position:relative;flex:0 1 240px;min-width:180px}.search input{width:100%;padding:9px 12px 9px 34px;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(5,9,15,.22);color:var(--text);font-size:11px;outline:none}.search input:focus{border-color:rgba(225,90,104,.42)}.search svg{position:absolute;width:14px;left:11px;top:10px;color:#8390a5}
+    .achievement-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.achievement-card{width:100%;min-width:0;text-align:left;display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:15px;border:1px solid rgba(255,255,255,.075);background:linear-gradient(120deg,rgba(255,255,255,.045),rgba(255,255,255,.025));cursor:pointer;transition:transform .16s,border-color .16s,background .16s;content-visibility:auto;contain-intrinsic-size:68px}.achievement-card:hover{transform:translateY(-1px);background:rgba(255,255,255,.075);border-color:rgba(255,255,255,.16)}.achievement-card.done{border-color:rgba(119,221,177,.19)}.achievement-card.started{border-color:rgba(246,214,139,.2)}.mc-frame{width:39px;height:39px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;position:relative;background:linear-gradient(145deg,rgba(225,90,104,.12),rgba(255,255,255,.045));border:1px solid rgba(225,90,104,.21)}.mc-frame.goal{border-color:rgba(246,214,139,.42);background:rgba(246,214,139,.11)}.mc-frame.challenge{border-color:rgba(199,183,255,.42);background:rgba(199,183,255,.12)}.mc-frame.done:after{content:"✓";position:absolute;right:-4px;top:-5px;width:14px;height:14px;display:grid;place-items:center;border-radius:50%;font-size:9px;color:#08130f;background:var(--mint);border:1px solid #0d1714}.mc-sprite{display:block;image-rendering:pixelated}.ach-copy{min-width:0;flex:1}.ach-copy strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:650}.ach-copy span{display:block;margin-top:2px;color:#8f9bb0;font-size:9px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ach-status{width:7px;height:7px;border-radius:50%;flex:0 0 auto;background:rgba(255,255,255,.18)}.done .ach-status{background:var(--mint);box-shadow:0 0 9px rgba(225,90,104,.55)}.started .ach-status{background:var(--gold)}.no-results{text-align:center;padding:34px;color:var(--muted);font-size:12px}
+    .detail-backdrop{position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:18px;background:rgba(5,8,13,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}.detail{width:min(720px,100%);max-height:min(84vh,800px);overflow:auto;border-radius:24px;padding:23px;background:linear-gradient(145deg,rgba(34,43,57,.96),rgba(20,27,39,.97));border:1px solid rgba(255,255,255,.16);box-shadow:0 28px 90px rgba(0,0,0,.5),inset 0 1px rgba(255,255,255,.1)}.detail-top{display:flex;justify-content:space-between;gap:15px}.detail-title{display:flex;align-items:center;gap:14px;min-width:0}.mc-frame.large{width:56px;height:56px;border-radius:16px}.detail-title h2{margin:2px 0 2px;font-size:21px;line-height:1.2;letter-spacing:-.025em}.detail-title p{color:var(--muted);font-size:11px;margin:0}.close{border:1px solid var(--line);background:rgba(255,255,255,.045);border-radius:11px;width:34px;height:34px;cursor:pointer;color:#c2ccdb}.close:hover{background:rgba(255,255,255,.1)}.detail-desc{margin:20px 0 16px;padding:15px 16px;border:1px solid rgba(255,255,255,.09);border-radius:15px;background:rgba(255,255,255,.035)}.detail-desc strong{display:block;color:var(--mint);font-size:9px;text-transform:uppercase;letter-spacing:.14em;margin-bottom:5px}.detail-desc p{font-size:13px;color:#e0e7f2;margin:0}.detail-progress{display:flex;justify-content:space-between;gap:10px;color:#9eabc0;font-size:10px;margin:0 1px 7px}.detail-progress b{color:#dce5f1;font-weight:600}.criteria-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.criterion{display:flex;align-items:center;gap:8px;min-width:0;padding:8px 9px;border-radius:11px;border:1px solid rgba(255,255,255,.065);background:rgba(255,255,255,.025)}.criterion.done{border-color:rgba(119,221,177,.17);background:rgba(119,221,177,.055)}.criterion-icon{width:23px;height:23px;flex:0 0 auto;display:grid;place-items:center;border-radius:7px;background:rgba(255,255,255,.055);color:#8f9bb0;font-size:10px}.criterion.done .criterion-icon{color:var(--mint);background:rgba(225,90,104,.1)}.criterion-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;color:#b9c4d5}.criterion.done .criterion-name{color:#e2ebf5}.parent-line{margin-top:15px;color:#8895aa;font-size:10px}.parent-line b{color:#c3cede;font-weight:550}
+    .footer{display:flex;justify-content:space-between;gap:12px;margin-top:22px;color:#718097;font-size:10px}.notice{position:fixed;bottom:20px;left:50%;transform:translate(-50%,18px);opacity:0;pointer-events:none;z-index:20;padding:10px 15px;border-radius:12px;background:#242e3b;border:1px solid var(--line);color:#f0f5fc;box-shadow:0 12px 34px rgba(0,0,0,.35);transition:.2s;font-size:12px}.notice.show{opacity:1;transform:translate(-50%,0)}
+    @media(max-width:760px){.app{padding:26px 16px 48px}.topbar{margin-bottom:35px}.hero{align-items:flex-start;flex-direction:column}.upload-wrap{width:100%;align-items:stretch}.upload-controls{width:100%;justify-content:flex-start}.upload-help{align-self:flex-start}.upload{flex:1}.metrics{grid-template-columns:repeat(2,1fr);gap:9px}.metric{padding:14px;min-height:106px}.metric strong{font-size:24px}.content-grid{grid-template-columns:1fr}.overview{grid-template-columns:120px 1fr;padding:18px;gap:15px}.ring{width:110px;height:110px}.ringtext strong{font-size:26px}.browser-tools{align-items:stretch}.search{flex:1 1 100%;order:-1}.achievement-list{grid-template-columns:1fr}.footer{flex-direction:column}.local-badge{font-size:0;padding:9px}.local-badge .dot{margin:0}}
+    @media(max-width:450px){.overview{grid-template-columns:1fr;text-align:center}.ringbox{margin:0 auto}.overview-copy p{margin:auto}.barlabel{font-size:9px}.tabs .tab{padding:11px 9px;font-size:12px}.tab .count{margin-left:3px}.criteria-grid{grid-template-columns:1fr}.detail{padding:18px}.detail-title h2{font-size:18px}}
+    .mc-frame:before{content:"";position:absolute;inset:-4px;z-index:0;background:url('./assets/Advancement-plain-raw.webp') center/100% 100% no-repeat;image-rendering:pixelated;opacity:.7;pointer-events:none}.mc-frame.goal:before{background-image:url('./assets/Advancement-oval-raw.webp')}.mc-frame.challenge:before{background-image:url('./assets/Advancement-fancy-raw.webp')}.mc-frame.done:before{filter:sepia(.5) saturate(1.4)}.mc-frame .mc-sprite{position:relative;z-index:1}
+    .criteria-grid{grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px}.criterion{min-height:53px;gap:10px;padding:8px 10px}.criterion-icon{width:36px;height:36px;border-radius:10px}.criterion-icon .mc-sprite{image-rendering:pixelated!important}.criterion-name{white-space:normal;line-height:1.25;font-size:11px}.detail .section-head h2{font-size:13px}.detail .section-head{margin-top:20px}
+    @media(max-width:450px){.criteria-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.criterion{gap:7px;padding:7px}.criterion-icon{width:32px;height:32px}.criterion-name{font-size:10px}}
+    @media(max-width:450px){.criteria-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .achievement-list{gap:12px}.achievement-card{position:relative;min-height:82px;padding:13px 15px;gap:14px;border-radius:18px;overflow:hidden;isolation:isolate;transition:transform .24s cubic-bezier(.2,.8,.2,1),border-color .24s,background .24s,box-shadow .24s}.achievement-card:before{content:"";position:absolute;inset:0;z-index:0;opacity:0;background:linear-gradient(110deg,transparent 18%,rgba(255,255,255,.13) 48%,transparent 75%);transform:translateX(-100%);transition:opacity .2s}.achievement-card>*{position:relative;z-index:1}.achievement-card:hover{transform:translateY(-2px) scale(1.008);border-color:rgba(190,223,255,.27);background:linear-gradient(120deg,rgba(255,255,255,.105),rgba(225,90,104,.045));box-shadow:0 10px 26px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.14)}.achievement-card:hover:before{opacity:1;animation:glass-sheen .9s ease}.achievement-card:active{transform:scale(.985);background:rgba(225,90,104,.1)}.achievement-card:focus-visible,.upload:focus-within,.filter:focus-visible,.tab:focus-visible{outline:2px solid rgba(225,90,104,.75);outline-offset:3px}.mc-frame{width:52px;height:52px;border-radius:15px;transition:transform .24s cubic-bezier(.2,.8,.2,1),filter .24s}.achievement-card:hover .mc-frame{transform:scale(1.08) rotate(-2deg);filter:drop-shadow(0 4px 8px rgba(225,90,104,.18))}.mc-frame.large{width:68px;height:68px}.mc-frame .mc-sprite{width:30px!important;height:30px!important}.mc-frame.large .mc-sprite{width:40px!important;height:40px!important}.mc-item-image{object-fit:contain;image-rendering:pixelated}.ach-copy strong{font-size:14px}.ach-copy span{font-size:11px}.filter,.tab,.upload,.close{transition:transform .2s cubic-bezier(.2,.8,.2,1),background .2s,border-color .2s,color .2s,box-shadow .2s}.filter:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15)}.filter:active,.upload:active,.close:active{transform:scale(.96)}.detail-backdrop:not(.hidden) .detail{animation:glass-pop .28s cubic-bezier(.2,.85,.25,1) both}.detail-backdrop:not(.hidden){animation:glass-fade .22s ease both}@keyframes glass-pop{from{opacity:0;transform:translateY(12px) scale(.97);filter:blur(5px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}@keyframes glass-fade{from{opacity:0}to{opacity:1}}@keyframes glass-sheen{to{transform:translateX(100%)}}
+    @media(max-width:760px){.achievement-card{min-height:78px;padding:11px 12px}.mc-frame{width:48px;height:48px}}
+    @media(max-width:450px){.achievement-card{min-height:74px}.mc-frame{width:44px;height:44px}.mc-frame .mc-sprite{width:27px!important;height:27px!important}}
+    .redesigned{max-width:1380px;padding-top:24px}.redesigned .topbar{margin-bottom:16px}.redesigned .brand-mark{font-size:20px}.world-label{font-size:12px;color:#8e9ab0;font-weight:500;letter-spacing:0;margin-left:8px}.compact-progress{position:relative;display:flex;align-items:center;gap:12px;padding:12px 15px;border:1px solid rgba(255,255,255,.1);border-radius:19px;background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025));backdrop-filter:blur(14px);box-shadow:inset 0 1px rgba(255,255,255,.1)}.progress-dial{--progress:0deg;width:54px;height:54px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--mint) var(--progress),rgba(255,255,255,.1) 0);position:relative}.progress-dial:before{content:"";position:absolute;inset:5px;border-radius:50%;background:#111722}.progress-dial span{z-index:1;font-size:13px;font-weight:750}.progress-copy{display:flex;flex-direction:column;min-width:0;flex:1}.progress-copy strong{font-size:17px}.progress-copy span{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.filter-toggle,.all-tree-button{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.055);padding:9px 14px;border-radius:12px;color:#dfe7f2;cursor:pointer;font-size:12px;font-weight:650}.filter-toggle span{margin-left:8px;color:var(--mint)}.filter-menu{position:absolute;z-index:8;right:140px;top:72px;width:178px;padding:6px;border-radius:15px;display:grid;gap:3px;box-shadow:0 16px 40px rgba(0,0,0,.38)}.filter-menu button{border:0;text-align:left;background:transparent;color:#c2ccda;border-radius:9px;padding:9px 10px;font-size:12px;cursor:pointer}.filter-menu button:hover,.filter-menu button.selected{background:rgba(225,90,104,.1);color:var(--mint)}.all-tree-button{background:linear-gradient(135deg,rgba(225,90,104,.17),rgba(167,44,59,.1));border-color:rgba(225,90,104,.27)}.all-tree-button.active{color:var(--mint);box-shadow:0 0 18px rgba(225,90,104,.12)}.progress-track{height:4px;margin:9px 3px 13px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}.progress-track span{display:block;width:0;height:100%;border-radius:99px;background:linear-gradient(90deg,#83eac1,#b2d8ff);transition:width .55s cubic-bezier(.2,.8,.2,1)}.game-tabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-bottom:15px}.game-tab{display:flex;align-items:center;justify-content:center;gap:8px;min-height:58px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.035);color:#9ba8bb;cursor:pointer;font-size:12px;font-weight:650;transition:transform .2s,background .2s,border-color .2s,color .2s}.game-tab:hover{transform:translateY(-2px);background:rgba(255,255,255,.08);color:#edf4ff}.game-tab.active{background:linear-gradient(135deg,rgba(225,90,104,.13),rgba(167,44,59,.06));border-color:rgba(225,90,104,.34);color:#eaf8f2;box-shadow:inset 0 1px rgba(255,255,255,.12)}.game-tab .mc-frame{width:34px;height:34px;border:0;background:transparent;box-shadow:none}.game-tab .mc-frame:before{display:none}.game-tab .mc-frame .mc-sprite{width:26px!important;height:26px!important}.all-tab-icon{font-size:21px;color:var(--mint)}.tree-heading{display:flex;align-items:end;justify-content:space-between;margin:7px 2px 9px}.tree-heading h1{margin:0;font-size:19px;letter-spacing:-.025em}.tree-heading span{font-size:11px;color:#8996ab}.tree-status{padding-bottom:3px}.tree-viewport{position:relative;max-height:62vh;min-height:390px;overflow:auto;border-radius:19px;background:linear-gradient(135deg,rgba(255,255,255,.045),rgba(255,255,255,.018));scrollbar-color:rgba(178,199,222,.28) transparent;scrollbar-width:thin}.tree-canvas{position:relative;min-width:100%;min-height:100%;padding:18px}.tree-lines{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}.tree-edge{fill:none;stroke:rgba(230,238,249,.82);stroke-width:2;filter:drop-shadow(0 0 3px rgba(255,255,255,.2));stroke-dasharray:800;stroke-dashoffset:800;animation:draw-edge .34s ease forwards}.tree-node{position:absolute;width:132px;height:88px;display:grid;grid-template-columns:42px 1fr;grid-template-rows:1fr auto;align-items:center;gap:3px 8px;padding:8px;border:2px solid #12151a;border-radius:13px;background:linear-gradient(145deg,#bd8d14,#99700e);box-shadow:0 3px 0 #59420c,inset 0 1px rgba(255,255,255,.32);color:#fff;cursor:pointer;text-align:left;opacity:0;transform:translateY(8px) scale(.94);animation:node-appear .24s cubic-bezier(.2,.8,.2,1) forwards;transition:filter .18s,transform .18s,box-shadow .18s}.tree-node:hover{z-index:4;filter:brightness(1.17);transform:translateY(-3px) scale(1.04);box-shadow:0 7px 18px rgba(0,0,0,.36),inset 0 1px rgba(255,255,255,.4)}.tree-node .mc-frame{grid-row:1/3;width:40px;height:40px;border:0;border-radius:0;background:transparent;box-shadow:none}.tree-node .mc-frame:before{display:none}.tree-node .mc-frame .mc-sprite{width:32px!important;height:32px!important}.tree-node-title{align-self:end;font-size:10px;line-height:1.15;font-weight:750;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-shadow:1px 1px #382707}.tree-node-state{align-self:start;color:rgba(255,255,255,.72);font-size:9px}.tree-node.locked{background:linear-gradient(145deg,#515865,#3d444e);box-shadow:0 3px 0 #242a32,inset 0 1px rgba(255,255,255,.2);filter:saturate(.5)}.tree-node.started{background:linear-gradient(145deg,#bd8d14,#99700e);border-color:#f0ca60}.tree-node.challenge{border-style:double;border-width:4px;border-color:#ecc562}.tree-node.done{background:linear-gradient(145deg,#d6a72d,#a77d14)}.tree-welcome{position:absolute;inset:0;display:grid;place-items:center;padding:20px;color:#8f9bb0;text-align:center;font-size:13px;pointer-events:none}.tree-welcome.hidden{display:none}.redesigned .footer{margin-top:12px}.redesigned .worldline{display:none!important}@keyframes node-appear{to{opacity:1;transform:translateY(0) scale(1)}}@keyframes draw-edge{to{stroke-dashoffset:0}}
+    @media(max-width:760px){.redesigned{padding:18px 12px 35px}.game-tabs{grid-template-columns:repeat(3,1fr)}.game-tab{min-height:52px}.tree-viewport{max-height:65vh;min-height:340px}.tree-heading{align-items:start;flex-direction:column;gap:3px}.tree-node{width:122px}.filter-menu{right:102px;top:70px}}
+    @media(max-width:480px){.redesigned .brand{font-size:0}.redesigned .brand-mark{font-size:20px}.world-label{font-size:10px}.compact-progress{gap:7px;padding:10px}.progress-dial{width:46px;height:46px}.progress-copy strong{font-size:14px}.progress-copy span{max-width:95px;font-size:9px}.filter-toggle,.all-tree-button{padding:8px 9px;font-size:10px}.zip-pick{display:none}.tree-node{width:112px;height:82px;grid-template-columns:36px 1fr;padding:6px}.tree-node .mc-frame{width:34px;height:34px}.tree-node .mc-frame .mc-sprite{width:28px!important;height:28px!important}.tree-viewport{min-height:320px}}
+    /* Compact achievement map */
+    .game-tabs{grid-template-columns:repeat(6,minmax(0,1fr));}.game-tab{min-width:0;overflow:hidden;padding:5px 8px}.game-tab>span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.game-tab .mc-frame{flex:0 0 30px}.tree-viewport{overflow:hidden;cursor:grab;touch-action:none;min-height:390px;max-height:62vh}.tree-viewport.dragging{cursor:grabbing}.tree-canvas{transform-origin:0 0;will-change:transform}.tree-node{width:52px;height:52px;display:grid;place-items:center;padding:0;border-radius:50%;border:2px solid #303643;background:radial-gradient(circle at 35% 25%,#323a49,#151a24 68%);box-shadow:0 0 0 3px rgba(255,255,255,.045),0 5px 15px rgba(0,0,0,.3);opacity:0;transform:scale(.65);animation:node-appear .22s cubic-bezier(.2,.8,.2,1) forwards}.tree-node .mc-frame{grid-row:auto;width:38px;height:38px;border:0;background:transparent;box-shadow:none}.tree-node .mc-frame .mc-sprite{width:32px!important;height:32px!important}.tree-node-title,.tree-node-state{position:absolute;left:50%;top:calc(100% + 8px);width:max-content;max-width:180px;padding:6px 9px;border:1px solid rgba(255,255,255,.16);border-radius:9px;background:rgba(17,23,34,.96);box-shadow:0 8px 24px rgba(0,0,0,.35);font-size:11px;line-height:1.25;text-shadow:none;opacity:0;pointer-events:none;transform:translate(-50%,-3px);transition:opacity .14s,transform .14s;z-index:5}.tree-node-state{top:calc(100% + 35px);font-size:9px;color:#b6c2d3}.tree-node:hover .tree-node-title,.tree-node:hover .tree-node-state,.tree-node:focus-visible .tree-node-title,.tree-node:focus-visible .tree-node-state{opacity:1;transform:translate(-50%,0)}.tree-node:hover{z-index:6;filter:brightness(1.18);transform:scale(1.1);box-shadow:0 0 0 4px rgba(240,193,72,.2),0 0 22px rgba(240,193,72,.4)}.tree-node.done{border-color:#e5b63c;background:radial-gradient(circle at 35% 25%,#efc851,#865e0b 75%);box-shadow:0 0 0 3px rgba(240,193,72,.14),0 0 17px rgba(240,193,72,.28)}.tree-node.started{border-color:#8ae0bd;box-shadow:0 0 0 3px rgba(138,224,189,.14),0 0 15px rgba(138,224,189,.2)}.tree-node.challenge{width:60px;height:60px;border:2px solid #b98cff;box-shadow:0 0 0 4px rgba(185,140,255,.14),0 0 18px rgba(185,140,255,.23)}.tree-edge{stroke:rgba(157,174,199,.46);stroke-width:1.5;filter:none}.tree-node.challenge~.tree-node-title{border-color:rgba(185,140,255,.4)}.all-tree-button{white-space:nowrap}.game-tab .mc-frame:before{display:none}
+    .tree-tools{position:absolute;z-index:7;right:12px;top:12px;display:flex;gap:5px}.tree-tools button{width:32px;height:32px;border:1px solid rgba(255,255,255,.14);border-radius:10px;background:rgba(16,22,32,.82);color:#dce5f2;cursor:pointer}.tree-tools button:hover{background:rgba(225,90,104,.16)}
+    @media(max-width:760px){.game-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}.tree-viewport{min-height:340px;max-height:65vh}.tree-node-title{max-width:140px}}
+    @media(max-width:480px){.game-tab{gap:4px;font-size:10px;padding:4px}.tree-viewport{min-height:320px}.tree-node{width:48px;height:48px}.tree-node.challenge{width:54px;height:54px}}
+    .game-tab{height:58px;min-height:58px;padding:0 12px;display:flex;align-items:center;justify-content:center;gap:9px}.game-tab>span:last-child{line-height:1;flex:0 1 auto}.game-tab>.mc-sprite{display:block!important;width:30px!important;height:30px!important;flex:0 0 30px;object-fit:contain;image-rendering:pixelated}.all-tab-icon{line-height:1;flex:0 0 30px}.tree-viewport{height:calc(100vh - 355px);min-height:400px;max-height:none}.tree-node{width:38px;height:38px}.tree-node .mc-frame{width:32px;height:32px}.tree-node .mc-frame .mc-sprite{width:27px!important;height:27px!important}.tree-node.major{width:48px;height:48px}.tree-node.major .mc-frame{width:40px;height:40px}.tree-node.major .mc-frame .mc-sprite{width:34px!important;height:34px!important}.tree-node.challenge{width:44px;height:44px}.game-tab:hover>.mc-sprite{transform:scale(1.08);transition:transform .18s}.game-tab.active>.mc-sprite{filter:drop-shadow(0 0 8px rgba(225,90,104,.35))}.tree-edge{stroke-width:2.2}.tree-node-title{white-space:normal}
+    @media(max-width:760px){.game-tab{height:54px;min-height:54px;padding:0 6px}.tree-viewport{height:calc(100vh - 400px);min-height:330px}}
+    @media(max-width:480px){.game-tab{height:50px;min-height:50px;gap:5px}.game-tab>.mc-sprite{width:24px!important;height:24px!important;flex-basis:24px}.tree-viewport{height:calc(100vh - 420px);min-height:300px}}
+    @media(prefers-reduced-transparency:reduce){.glass,.detail-backdrop{backdrop-filter:none;-webkit-backdrop-filter:none}}
+
+    /* Dedicated cold, spacious presentation for the combined "All" graph only. */
+    .tree-viewport.all-mode{isolation:isolate;border-color:rgba(112,145,183,.24);background:radial-gradient(ellipse at 50% 48%,rgba(52,83,119,.24),transparent 61%),radial-gradient(ellipse at 16% 18%,rgba(49,78,113,.10),transparent 42%),linear-gradient(145deg,#151e2b 0%,#101824 58%,#121b29 100%);box-shadow:0 18px 54px rgba(0,0,0,.2),inset 0 1px rgba(190,215,244,.045)}
+    .tree-viewport.all-mode:before{content:"";position:absolute;inset:-12%;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 47% 54%,rgba(93,135,177,.10),transparent 43%);animation:all-tree-atmosphere 19s ease-in-out infinite alternate}
+    .tree-viewport.all-mode .tree-canvas{z-index:1}
+    .tree-viewport.all-mode .tree-tools{z-index:5}
+    .tree-viewport.all-mode .tree-tools button{border-color:rgba(139,171,207,.2);background:rgba(17,27,41,.78);color:#dce9f7;box-shadow:0 4px 14px rgba(0,0,0,.16);transition:transform .24s cubic-bezier(.2,.8,.2,1),background .24s,border-color .24s,box-shadow .24s}
+    .tree-viewport.all-mode .tree-tools button:hover{transform:translateY(-2px);border-color:rgba(146,193,231,.42);background:rgba(46,70,98,.8);box-shadow:0 7px 18px rgba(0,0,0,.24),0 0 16px rgba(112,174,222,.1)}
+    .tree-viewport.all-mode .tree-tools button:active{transform:scale(.94)}
+    @keyframes all-tree-atmosphere{from{transform:translate3d(-1.2%,-.6%,0) scale(.98);opacity:.52}to{transform:translate3d(1.2%,.8%,0) scale(1.035);opacity:.9}}
+      .tree-viewport{position:relative;overflow:hidden;touch-action:none;cursor:grab;height:calc(100vh - 330px);min-height:410px;max-height:none;background:radial-gradient(ellipse at 50% 55%,rgba(35,55,81,.31),transparent 66%),linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.015))}
+    .tree-canvas{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:none}
+    .tree-tools{z-index:4}.tree-welcome{z-index:2;pointer-events:none}.tree-viewport:has(.tree-welcome.hidden) .tree-welcome{display:none}
+    @media(max-width:760px){.tree-viewport{height:calc(100vh - 390px);min-height:360px}}
+    @media(max-width:480px){.tree-viewport{height:calc(100vh - 420px);min-height:320px}}
+  .filter-menu{right:0!important;top:calc(100% + 8px)!important}.game-tab.all-tab.active{color:var(--mint)}
+  .filter-menu{right:0!important;top:calc(100% + 8px)!important}.game-tab.all-tab.active{color:var(--mint)}
+    /* Nether visual theme: color and motion only; preserve current geometry. */
+    :root{--bg:#100d12;--panel:rgba(41,25,30,.72);--line:rgba(113,71,82,.42);--muted:#a99aa1;--text:#f4edf0;--mint:#d83c4c;--blue:#a72c3b;--gold:#e15a68;--rose:#ef7480;--green:#d83c4c}
+    body{background:radial-gradient(ellipse at 12% -5%,rgba(126,36,52,.25),transparent 36%),radial-gradient(ellipse at 95% 12%,rgba(84,28,42,.2),transparent 30%),#100d12}
+    .brand-mark{color:#f4edf0;background:linear-gradient(145deg,rgba(216,60,76,.24),rgba(167,44,59,.12));border-color:rgba(216,60,76,.34)}
+    .local-badge,.glass,.compact-progress,.tree-viewport{border-color:rgba(113,71,82,.42)}
+    .glass,.compact-progress{background:linear-gradient(145deg,rgba(50,29,35,.78),rgba(33,21,26,.84))}
+    .upload{border-color:rgba(216,60,76,.48);background:linear-gradient(135deg,rgba(216,60,76,.2),rgba(167,44,59,.13))}
+    .upload:hover,.filter-menu button:hover,.filter-menu button.selected{background:rgba(216,60,76,.16);color:#f4edf0}
+    .filter-toggle,.filter-menu button{border-color:rgba(113,71,82,.42)}
+    .filter-toggle span,.all-tab-icon{color:#e15a68}
+    .game-tab{border-color:rgba(113,71,82,.35);background:rgba(41,25,30,.42)}
+    .game-tab:hover{background:rgba(216,60,76,.12);color:#f4edf0}
+    .game-tab.active{background:linear-gradient(135deg,rgba(216,60,76,.2),rgba(167,44,59,.1));border-color:rgba(216,60,76,.52);box-shadow:inset 0 1px rgba(255,255,255,.1),0 0 18px rgba(216,60,76,.1)}
+    .progress-track{background:rgba(255,255,255,.09)}
+    .progress-track span{background:linear-gradient(90deg,#a72c3b,#e15a68)}
+    .tree-viewport{background:radial-gradient(ellipse at 50% 55%,rgba(91,30,43,.28),transparent 68%),linear-gradient(145deg,rgba(50,29,35,.55),rgba(23,17,22,.45))}
+    .detail-backdrop{background:rgba(10,6,9,.68)}
+    .detail{background:linear-gradient(145deg,rgba(50,29,35,.97),rgba(23,17,22,.98));border-color:rgba(113,71,82,.6)}
+    .detail-desc,.criterion{border-color:rgba(113,71,82,.35);background:rgba(50,29,35,.4)}
+    .detail-desc strong,.criterion.done .criterion-name{color:#e15a68}
+    .close:hover{background:rgba(216,60,76,.16)}
+    .notice{background:#321d23;border-color:rgba(113,71,82,.55)}
+    @keyframes ov-pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+    @keyframes ov-fade{from{opacity:0}to{opacity:1}}
+    .filter-menu:not(.hidden){animation:ov-pop .2s cubic-bezier(.2,.8,.2,1) both}.inline-filters{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.inline-filters button{border:1px solid rgba(113,71,82,.42);background:rgba(255,255,255,.035);color:#a99aa1;border-radius:999px;padding:7px 11px;cursor:pointer;transition:background .18s,border-color .18s,color .18s,transform .18s}.inline-filters button:hover{background:rgba(216,60,76,.12);color:#f4edf0}.inline-filters button.selected{color:#f4edf0;border-color:rgba(216,60,76,.55);background:rgba(216,60,76,.18);box-shadow:0 0 12px rgba(216,60,76,.12)}
+    .game-tab,.filter-toggle,.upload,.close,.tree-tools button{transition:background-color .2s,border-color .2s,color .2s,box-shadow .2s,transform .2s cubic-bezier(.2,.8,.2,1)}
+    .game-tab:active,.filter-toggle:active,.upload:active,.tree-tools button:active{transform:scale(.98)}
+  
+    .upload-wrap{flex-direction:column;align-items:flex-end;gap:5px}.upload-controls{display:flex;align-items:center;justify-content:flex-end;gap:12px}.upload-help{border:0;background:transparent;padding:2px 1px;color:#8f9bb0;font-size:10px;cursor:pointer;transition:color .18s,opacity .18s}.upload-help:hover{color:var(--mint)}
+    .detail-guide{margin:0 0 16px;padding:13px 16px;border:1px solid rgba(119,221,177,.16);border-radius:15px;background:rgba(119,221,177,.045)}.detail-guide strong{display:block;color:#9edcc0;font-size:9px;text-transform:uppercase;letter-spacing:.14em;margin-bottom:5px}.detail-guide p{font-size:12px;line-height:1.6;color:#c8d5e4;margin:0}.help-dialog{width:min(620px,100%)}.help-dialog h2{font-size:19px;margin:3px 0 0}.help-content{margin-top:17px;color:#cbd5e3;font-size:12px;line-height:1.65}.help-content p{margin:0 0 12px}.help-content b{color:#f0f4fa}.help-content code,.help-content kbd{display:inline-block;padding:1px 5px;border-radius:5px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.09);color:#e6edf7;font-family:ui-monospace,monospace;font-size:11px}.help-note{margin:14px 0;padding:13px 15px;border:1px solid rgba(225,90,104,.19);border-radius:13px;background:rgba(225,90,104,.055)}.help-note ol{margin:6px 0 0;padding-left:20px}.help-note li{padding:2px 0}.help-foot{color:#8f9bb0;font-size:10px}
+
+    .detail-desc p{white-space:pre-line}
+    @media(max-width:760px){.topbar{align-items:flex-start;flex-direction:column;gap:12px}.upload-wrap{align-items:flex-start}.upload-controls{width:100%;justify-content:flex-start}.upload-help{align-self:flex-start}}
+  
+    /* Refined visual hierarchy and consistent icon centering. */
+    .achievement-card{border-color:rgba(225,90,104,.22)}.achievement-card.done{border-color:rgba(241,191,78,.42);background:linear-gradient(120deg,rgba(241,191,78,.065),rgba(255,255,255,.025))}.achievement-card.started{border-color:rgba(225,90,104,.46)}.mc-frame.done:after{background:#f1bf4e;color:#21180b;border-color:#241a12}.criterion.done .criterion-name{color:#f1bf4e}
+
+    .redesigned .brand{font-size:15px;gap:12px}.world-label{font-size:13px}.progress-copy strong{font-size:19px}.progress-copy span{font-size:12px}.game-tab{font-size:13px}.tree-heading h1{font-size:21px}.tree-status,.tree-heading>div>span{font-size:12px}.upload{font-size:14px;padding:13px 18px}.upload-help{font-size:11px}.inline-filters button{font-size:12px;padding:7px 12px}
+    .game-tab{gap:9px}.game-tab-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;line-height:0;overflow:visible}.game-tab-icon .mc-sprite,.game-tab-icon img{width:28px!important;height:28px!important;display:block;object-fit:contain;image-rendering:pixelated}.game-tab-icon .mc-frame{margin:0!important}
+    .tree-viewport.all-mode{border-color:rgba(153,54,70,.48);background:radial-gradient(ellipse at 50% 48%,rgba(111,34,49,.28),transparent 61%),radial-gradient(ellipse at 16% 18%,rgba(95,29,42,.16),transparent 42%),linear-gradient(145deg,#24151b 0%,#171116 58%,#1d1218 100%);box-shadow:0 18px 54px rgba(0,0,0,.2),inset 0 1px rgba(244,190,198,.045)}
+    .tree-viewport.all-mode:before{background:radial-gradient(ellipse at 47% 54%,rgba(178,66,86,.13),transparent 43%)}
+    .tree-viewport.all-mode .tree-tools button{border-color:rgba(171,79,94,.32);background:rgba(35,19,26,.84);color:#f4dfe3}
+    .tree-viewport.all-mode .tree-tools button:hover{border-color:rgba(225,90,104,.55);background:rgba(83,31,44,.86);box-shadow:0 7px 18px rgba(0,0,0,.24),0 0 16px rgba(225,90,104,.14)}
+
+    /* Compact world metrics beside filters */
+    .compact-progress{gap:14px;flex-wrap:wrap}
+    .inline-world-metrics{display:flex;align-items:center;justify-content:center;gap:7px;flex:1 1 340px;min-width:250px}
+    .inline-world-metric{display:inline-flex;align-items:center;gap:6px;min-width:0;padding:7px 9px;border:1px solid rgba(113,71,82,.32);border-radius:11px;background:linear-gradient(135deg,rgba(67,35,44,.42),rgba(38,24,30,.35));color:#b8a9ae;font-size:11px;white-space:nowrap;transition:transform .24s,border-color .24s,background .24s,box-shadow .24s}
+    .inline-world-metric:hover{transform:translateY(-2px);border-color:rgba(225,90,104,.48);box-shadow:0 7px 20px rgba(0,0,0,.22),0 0 14px rgba(225,90,104,.08)}
+    .inline-world-metric .metric-symbol{color:#f0a34d;font-size:14px;line-height:1}
+    .inline-world-metric .death-symbol{color:#ef6879}
+    .inline-world-metric .metric-label{color:#a99aa1}
+    .inline-world-metric b{color:#f4edf0;font-size:12px;font-weight:750;font-variant-numeric:tabular-nums}
+    .inline-world-metrics:not(.has-data) b{color:#8f858b}
+    .achievement-card.locked{border-color:rgba(239,82,103,.28);background:linear-gradient(120deg,rgba(239,82,103,.055),rgba(255,255,255,.02))}
+    .achievement-card.started{border-color:rgba(255,150,61,.54);background:linear-gradient(120deg,rgba(255,150,61,.10),rgba(255,255,255,.025));box-shadow:inset 3px 0 rgba(255,150,61,.58)}
+    .achievement-card.done{border-color:rgba(244,200,79,.56);background:linear-gradient(120deg,rgba(244,200,79,.095),rgba(255,255,255,.025));box-shadow:inset 3px 0 rgba(244,200,79,.62)}
+    .mc-frame{transition:transform .38s cubic-bezier(.2,.85,.25,1),filter .38s,box-shadow .38s}
+    .mc-frame.started{border-color:rgba(255,150,61,.68);background:rgba(255,150,61,.12);box-shadow:0 0 13px rgba(255,150,61,.12)}
+    .mc-frame.done{border-color:rgba(244,200,79,.68);background:rgba(244,200,79,.13);box-shadow:0 0 15px rgba(244,200,79,.13)}
+    .mc-frame.done:after{background:#f4c84f;color:#291d07;border-color:#34240a}
+    .criterion.done{border-color:rgba(244,200,79,.36);background:rgba(244,200,79,.07)}
+    .criterion.done .criterion-name{color:#f4d878}
+    .criterion.done .criterion-icon{color:#f4c84f;background:rgba(244,200,79,.13)}
+    .inline-filters button[data-filter="started"].selected{border-color:rgba(255,150,61,.7);background:rgba(255,150,61,.16);color:#ffc07e;box-shadow:0 0 14px rgba(255,150,61,.1)}
+    .inline-filters button[data-filter="done"].selected{border-color:rgba(244,200,79,.68);background:rgba(244,200,79,.14);color:#f4d878;box-shadow:0 0 14px rgba(244,200,79,.09)}
+    .tree-state-legend{position:absolute;left:13px;bottom:13px;z-index:4;display:flex;flex-wrap:wrap;gap:13px;padding:8px 11px;border:1px solid rgba(113,71,82,.3);border-radius:12px;background:rgba(20,12,16,.76);backdrop-filter:blur(10px);color:#bcaeb4;font-size:10px;pointer-events:none}
+    .tree-state-legend span{display:inline-flex;align-items:center;gap:6px}.tree-state-legend i{width:9px;height:9px;border-radius:50%;box-shadow:0 0 9px currentColor}
+    .tree-state-legend .locked-dot{color:#ef5267;background:#ef5267}.tree-state-legend .started-dot{color:#ff963d;background:#ff963d}.tree-state-legend .done-dot{color:#f4c84f;background:#f4c84f}
+    .topbar{animation:top-enter .7s cubic-bezier(.16,1,.3,1) both}.compact-progress{animation:panel-enter .8s .08s cubic-bezier(.16,1,.3,1) both}.game-tabs{animation:panel-enter .8s .16s cubic-bezier(.16,1,.3,1) both}.tree-heading{animation:panel-enter .8s .22s cubic-bezier(.16,1,.3,1) both}.tree-viewport{animation:panel-enter .9s .28s cubic-bezier(.16,1,.3,1) both}
+    .tree-viewport:before{animation:ambient-drift 17s ease-in-out infinite alternate}.game-tab.active{animation:tab-glow 3.2s ease-in-out infinite}.brand-mark{animation:brand-breathe 4s ease-in-out infinite}
+    .detail-backdrop:not(.hidden) .detail{animation:detail-enter .48s cubic-bezier(.16,1,.3,1) both}.detail-backdrop:not(.hidden){animation:glass-fade .32s ease both}
+    .detail-guide,.detail-desc{transition:border-color .3s,background .3s,box-shadow .3s}.detail-guide:hover,.detail-desc:hover{border-color:rgba(225,90,104,.36);box-shadow:0 8px 25px rgba(0,0,0,.12)}
+    .tree-tools button{transition:transform .28s cubic-bezier(.16,1,.3,1),background .25s,border-color .25s,box-shadow .25s}.tree-tools button:hover{transform:translateY(-2px) scale(1.045)}
+    @keyframes top-enter{from{opacity:0;transform:translateY(-13px);filter:blur(5px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+    @keyframes panel-enter{from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(4px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+    @keyframes detail-enter{from{opacity:0;transform:translateY(20px) scale(.975);filter:blur(7px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+    @keyframes ambient-drift{0%{opacity:.5;transform:scale(1) translate3d(-.4%,0,0)}100%{opacity:1;transform:scale(1.06) translate3d(.5%,.3%,0)}}
+    @keyframes tab-glow{0%,100%{box-shadow:inset 0 1px rgba(255,255,255,.08),0 0 0 rgba(216,60,76,0)}50%{box-shadow:inset 0 1px rgba(255,255,255,.12),0 0 18px rgba(216,60,76,.11)}}
+    @keyframes brand-breathe{0%,100%{box-shadow:inset 0 1px rgba(255,255,255,.2),0 0 0 rgba(216,60,76,0)}50%{box-shadow:inset 0 1px rgba(255,255,255,.2),0 0 18px rgba(216,60,76,.18)}}
+    @media(max-width:900px){.inline-world-metrics{order:3;flex-basis:100%;justify-content:flex-start}.inline-filters{margin-left:auto}}
+    @media(max-width:560px){.inline-world-metrics{gap:5px;overflow-x:auto;max-width:100%;padding-bottom:2px}.inline-world-metric{padding:6px 7px;font-size:10px}.inline-world-metric b{font-size:10px}.metric-label{white-space:normal}.tree-state-legend{left:8px;bottom:8px;gap:8px;font-size:9px;padding:7px 8px}}
+
+  </style>
+</head>
+<body>
+<main class="app redesigned">
+  <header class="topbar"><div class="brand"><span class="brand-mark">◈</span>OVERWORLD <span class="world-label" id="worldname">Мир не загружен</span></div><div class="upload-wrap"><div class="upload-controls"><label class="upload"><input id="folderInput" type="file" multiple webkitdirectory directory><span>Загрузить мир</span></label><label class="zip-pick">или ZIP<input id="zipInput" type="file" accept=".zip,application/zip"></label></div><button class="upload-help" id="uploadHelpBtn" type="button" aria-haspopup="dialog" aria-controls="uploadHelpBackdrop" aria-expanded="false">ⓘ Где найти папку/ZIP?</button></div></header>
+  <section class="compact-progress"><div class="progress-dial" id="ring"><span id="percent">0%</span></div><div class="progress-copy"><strong id="progressLabel">0 из 126</strong><span id="playerSummary">Загрузи сохранение мира</span></div><div class="inline-world-metrics" id="inlineWorldMetrics" aria-label="Краткая статистика мира"><span class="inline-world-metric"><span class="metric-symbol death-symbol">✕</span><span class="metric-label">Смерти</span><b id="metricDeaths">—</b></span><span class="inline-world-metric"><span class="metric-symbol">◷</span><span class="metric-label">Время игрока</span><b id="metricPlayerTime">—</b></span><span class="inline-world-metric"><span class="metric-symbol">☀</span><span class="metric-label">Время в игре</span><b id="metricWorldTime">—</b></span></div><div class="inline-filters" role="group" aria-label="Фильтр достижений"><button type="button" data-filter="all" class="selected" aria-pressed="true">Все</button><button type="button" data-filter="locked" aria-pressed="false">Осталось</button><button type="button" data-filter="started" aria-pressed="false">В процессе</button><button type="button" data-filter="done" aria-pressed="false">Получены</button></div></section>
+  <div class="progress-track"><span id="progressBar"></span></div>
+  <nav class="game-tabs" id="gameTabs" aria-label="Вкладки достижений Minecraft"></nav>
+  <div class="tree-heading"><div><h1 id="treeTitle">Дерево достижений</h1><span id="treeCount">126 достижений</span></div><span id="treeStatus" class="tree-status">Загрузи мир, чтобы увидеть прогресс</span></div>
+  <section id="treeViewport" class="tree-viewport glass"><div class="tree-tools"><button id="zoomOut" aria-label="Уменьшить">−</button><button id="zoomFit" aria-label="Вписать дерево">⌖</button><button id="zoomIn" aria-label="Увеличить">+</button></div><canvas id="treeCanvas" class="tree-canvas" aria-label="Интерактивное дерево достижений"></canvas><div class="tree-state-legend" aria-hidden="true"><span><i class="locked-dot"></i>Не получено</span><span><i class="started-dot"></i>В процессе</span><span><i class="done-dot"></i>Получено</span></div><div id="treeWelcome" class="tree-welcome">Загрузи папку мира или ZIP — достижения появятся на своих местах.</div></section>
+  <div class="worldline hidden" id="worldline"><span class="worldicon">◈</span><span id="worldnameProxy"></span><label class="identity">Игрок <input id="playerName" maxlength="16" placeholder="укажите ник" autocomplete="off"></label><span id="playerHint" class="sep"></span></div>
+  <section id="statsData" class="hidden"></section><section id="achData" class="hidden"></section>
+</main>
+<div id="detailBackdrop" class="detail-backdrop hidden" role="presentation"><section class="glass detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="detail-top"><div class="detail-title" id="detailHead"></div><button class="close" id="closeDetail" aria-label="Закрыть">×</button></div><div class="detail-desc"><strong>Условие получения</strong><p id="detailDescription"></p></div><div class="detail-guide"><strong>Как выполнить</strong><p id="detailGuide"></p></div><div class="detail-progress"><span id="detailProgress"></span><b id="detailStatus"></b></div><div class="bar"><span id="detailBar"></span></div><div id="criteriaSection" class="hidden"><div class="section-head"><h2>Критерии выполнения</h2><span id="criteriaTotal"></span></div><div class="criteria-grid" id="criteriaGrid"></div></div><div class="parent-line" id="parentLine"></div></section></div>
+<div id="uploadHelpBackdrop" class="detail-backdrop hidden" role="presentation"><section class="glass detail help-dialog" role="dialog" aria-modal="true" aria-labelledby="uploadHelpTitle"><div class="detail-top"><div><div class="eyebrow">СПРАВКА</div><h2 id="uploadHelpTitle">Где найти папку мира или ZIP?</h2></div><button class="close" id="closeUploadHelp" aria-label="Закрыть">×</button></div><div class="help-content"><p><b>Windows (обычный Minecraft):</b> нажми <kbd>Win + R</kbd>, введи <code>%appdata%\.minecraft\saves</code> и нажми Enter. Открой папку нужного мира.</p><p><b>macOS:</b> открой Finder → Перейти к папке и вставь <code>~/Library/Application Support/minecraft/saves</code>.</p><p><b>Linux:</b> открой <code>~/.minecraft/saves</code>. Для некоторых сборок путь к папке Minecraft может отличаться.</p><p><b>Modrinth / другой лаунчер:</b> открой настройки или папку нужного профиля, найди <code>saves</code> и выбери папку своего мира.</p><div class="help-note"><b>Что именно загружать?</b><ol><li>Выбирай папку конкретного мира — внутри обычно находятся <code>level.dat</code>, <code>advancements</code> и <code>stats</code>.</li><li>Чтобы создать ZIP: в Windows нажми правой кнопкой по папке мира → <b>Сжать в ZIP-файл</b> (или «Отправить → Сжатая ZIP-папка»); в macOS выбери <b>Сжать</b>; в Linux — <b>Сжать / Create Archive</b>. Затем выбери получившийся архив через «или ZIP».</li><li>Не выбирай только папку <code>region</code> или отдельные файлы чанков: в них нет прогресса достижений.</li></ol></div><p class="help-foot">Файл обрабатывается локально в браузере и не отправляется на сервер сайта.</p></div></section></div>
+<div class="notice" id="notice" role="status"></div>
+<script src="./catalog.js"></script><script src="./icons.js"></script><script src="./assets/jszip.min.js"></script>
+<script>
+(() => {
+  const $=id=>document.getElementById(id), catalog=window.OW_CATALOG||[], iconLibraries=window.OW_ICONS||{};
+  const categories={minecraft:'Minecraft',nether:'Незер',end:'Энд',adventure:'Приключения',husbandry:'Животноводство'};
+  const nautilusSpawnEgg='./assets/extra-items/nautilus_spawn_egg.png';
+  if(iconLibraries.extraEntities)iconLibraries.extraEntities.nautilus=nautilusSpawnEgg;
+  if(iconLibraries.extraInventory)iconLibraries.extraInventory.nautilus=nautilusSpawnEgg;
+  const categoryOrder=['minecraft','nether','end','adventure','husbandry'];
+  const categoryTotals={minecraft:16,nether:23,end:9,adventure:47,husbandry:31};
+  const byId=new Map(catalog.map(a=>[a.id,a]));
+  let records=[],stateFilter='all',activeCategory='minecraft',showAllTrees=false;
+  function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+  function normPath(p){return String(p||'').replace(/\\/g,'/').replace(/^\.\//,'')}
+  function notify(msg){const n=$('notice');n.textContent=msg;n.classList.add('show');setTimeout(()=>n.classList.remove('show'),3200)}
+  function plural(n,forms){const a=n%10,b=n%100;return forms[(a===1&&b!==11)?0:(a>=2&&a<=4&&(b<12||b>14))?1:2]}
+  const fmt=n=>Number(n||0).toLocaleString('ru-RU');
+  function iconMarkup(name,kind='inventory',size=22){
+    const lib=iconLibraries[kind];if(!lib||!name)return `<span class="mc-sprite mc-fallback" style="width:${size}px;height:${size}px">✦</span>`;
+    let key=String(name);if(kind!=='inventory')key=key.toLowerCase().replace(/[ _]+/g,'-');
+    if(kind==='entity'){
+      const wolfAsset=iconLibraries.extraEntities?.[key];if(wolfAsset)return `<img class="mc-sprite mc-item-image" alt="" src="${wolfAsset}" style="width:${size}px;height:${size}px">`;
+      const directEntity=iconLibraries.extraEntities?.[key];if(directEntity)return `<img class="mc-sprite mc-item-image" alt="" src="${directEntity}" style="width:${size}px;height:${size}px">`;
+      const nautilusEgg=iconLibraries.extraEntities?.nautilus;if(key==='nautilus'&&nautilusEgg)return `<img class="mc-sprite mc-item-image" alt="Яйцо призыва наутилуса" src="${nautilusEgg}" style="width:${size}px;height:${size}px">`;const aliases={'armadillo':'turtle','bogged':'stray','breeze':'vex','camel-husk':'camel','creaking':'shulker','nautilus':'nautilus','parched':'husk','sniffer':'camel','zombie-nautilus':'drowned','all-black':'black-cat','black':'black-cat','british-shorthair':'british-shorthair-cat','calico':'calico-cat','jellie':'jellie-cat','persian':'persian-cat','ragdoll':'ragdoll-cat','red':'red-cat','siamese':'siamese-cat','tabby':'tabby-cat','white':'white-cat'};key=aliases[key]||key;
+    }
+    if(kind==='biome'){const custom=iconLibraries.extraBiomes?.[key];if(custom)return `<img class="mc-sprite mc-item-image biome-extra" alt="" src="${custom}" style="width:${size}px;height:${size}px">`}
+    const exact=lib.positions[key]??lib.positions[String(name)],byName=exact??Object.entries(lib.positions).find(([k])=>k.toLowerCase()===String(name).toLowerCase())?.[1];
+    if(kind==='inventory'&&!byName){const extra=iconLibraries.extraInventory?.[String(name).toLowerCase()];if(extra)return `<img class="mc-sprite mc-item-image" alt="" src="${extra}" style="width:${size}px;height:${size}px">`}
+    const pos=byName??lib.fallbackPosition;if(!pos)return `<span class="mc-sprite mc-fallback" style="width:${size}px;height:${size}px">✦</span>`;
+    const idx=pos-1,cols=lib.width/lib.size,x=(idx%cols)*lib.size*lib.zoom,y=Math.floor(idx/cols)*lib.size*lib.zoom,base=lib.size*lib.zoom,scale=size/base;
+    return `<span class="mc-sprite" aria-hidden="true" style="width:${size}px;height:${size}px;background-image:url('${lib.url}');background-size:${lib.width*lib.zoom*scale}px auto;background-position:-${x*scale}px -${y*scale}px"></span>`
+  }
+  function frameMarkup(a,done,large=false){const typ=a.frame==='challenge'?'challenge':a.frame==='goal'?'goal':'';const state=done?'done':a.started?'started':'locked';return `<span class="mc-frame ${typ} ${state} ${large?'large':''}">${iconMarkup(a.iconName,'inventory',large?40:30)}</span>`}
+  function makeGroup(root){if(!groups.has(root))groups.set(root,{root,levelFile:null,advFiles:new Map(),statFiles:new Map(),level:null});return groups.get(root)}
+  const uuidRE='[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}';
+  let groups;
+  function playerFilePath(path,kind){const parts=normPath(path).split('/'),file=parts.at(-1)||'',m=file.match(new RegExp('^('+uuidRE+')\\.json$','i'));if(!m)return null;const folder=kind==='adv'?'advancements':'stats',at=parts.findIndex(x=>x.toLowerCase()===folder);if(at<0)return null;const rootAt=at>0&&parts[at-1].toLowerCase()==='players'?at-1:at;return{root:parts.slice(0,rootAt).join('/'),uuid:m[1]}}
+  async function parseEntries(entries){groups=new Map();let usercache={};for(const entry of entries){const p=normPath(entry.path),lower=p.toLowerCase();if(lower.endsWith('/usercache.json')||lower==='usercache.json'){try{const arr=JSON.parse(entry.text||'[]');for(const u of arr){if(u.uuid&&u.name)usercache[String(u.uuid).replaceAll('-','').toLowerCase()]=u.name}}catch{}continue}
+      let m=playerFilePath(p,'adv');if(m){const g=makeGroup(m.root),id=m.uuid.replaceAll('-','').toLowerCase();g.advFiles.set(id,{uuid:m.uuid,text:entry.text,path:p});continue}
+      m=playerFilePath(p,'stats');if(m){const g=makeGroup(m.root),id=m.uuid.replaceAll('-','').toLowerCase();g.statFiles.set(id,{uuid:m.uuid,text:entry.text,path:p});continue}
+      if(lower.endsWith('/level.dat')||lower==='level.dat'){const root=p.slice(0,p.length-'level.dat'.length).replace(/\/$/,'');makeGroup(root).levelFile=entry.bytes}
+    }
+    const usable=[...groups.values()].filter(g=>g.advFiles.size||g.statFiles.size);if(!usable.length)throw Error('Не нашёл advancement-файл игрока. Выбери папку мира (внутри players/advancements или advancements).');
+    usable.sort((a,b)=>Number(!!b.levelFile)-Number(!!a.levelFile));const g=usable[0];if(usable.length>1)notify('Нашёл несколько миров; загрузил первый с данными игрока. Для точного выбора загружай папку нужного мира.');
+    let selectedId=[...g.advFiles.keys()][0]||[...g.statFiles.keys()][0];if(!selectedId)throw Error('В сохранении нет файла прогресса игрока.');
+    const advFile=g.advFiles.get(selectedId),statFile=g.statFiles.get(selectedId);if(!advFile)throw Error('Не удалось сопоставить stats и advancement по UUID игрока.');
+    let adv;try{adv=JSON.parse(advFile.text)}catch{throw Error('Файл ачивок игрока повреждён или имеет неверный формат.')};let stats={stats:{}};if(statFile){try{stats=JSON.parse(statFile.text)}catch{}}
+    const playerName=usercache[selectedId]||'';let level={};if(g.levelFile)try{level=await awaitNbt(g.levelFile)}catch{}
+    const folder=g.root.split('/').filter(Boolean).at(-1)||'';return{adv,stats,level,hasStats:!!statFile,uuid:advFile.uuid,playerName,world:level.LevelName||folder||'Сохранённый мир'}
+  }
+  function awaitNbt(bytes){const parse=b=>{let p=0;const dv=new DataView(b.buffer,b.byteOffset,b.byteLength);const u8=()=>dv.getUint8(p++),i8=()=>dv.getInt8(p++),i16=()=>{const x=dv.getInt16(p);p+=2;return x},u16=()=>{const x=dv.getUint16(p);p+=2;return x},i32=()=>{const x=dv.getInt32(p);p+=4;return x},i64=()=>{const x=Number(dv.getBigInt64(p));p+=8;return x},str=()=>{const n=u16(),s=new TextDecoder().decode(new Uint8Array(b.buffer,b.byteOffset+p,n));p+=n;return s};const payload=t=>{if(t===1)return i8();if(t===2)return i16();if(t===3)return i32();if(t===4)return i64();if(t===5){p+=4;return null}if(t===6){p+=8;return null}if(t===7){const n=i32(),a=new Uint8Array(b.buffer,b.byteOffset+p,n);p+=n;return a}if(t===8)return str();if(t===9){const et=u8(),n=i32(),a=[];for(let i=0;i<n;i++)a.push(payload(et));return a}if(t===10){const o={};while(true){const et=u8();if(!et)break;o[str()]=payload(et)}return o}if(t===11){const n=i32(),a=[];for(let i=0;i<n;i++)a.push(i32());return a}if(t===12){const n=i32(),a=[];for(let i=0;i<n;i++)a.push(i64());return a}throw Error('NBT')};const t=u8();str();const root=payload(t);return root?.Data||root||{}};try{return parse(bytes)}catch{if(!('DecompressionStream'in window))return{};const ds=new DecompressionStream('gzip');return new Response(new Blob([bytes]).stream().pipeThrough(ds)).arrayBuffer().then(x=>parse(new Uint8Array(x)))} }
+  async function readSelected(files,isZip){const entries=[];if(isZip){if(!window.JSZip)throw Error('Не удалось загрузить встроенный модуль распаковки ZIP. Обнови страницу или выбери папку мира.');const zip=await JSZip.loadAsync(files[0]);for(const[path,f]of Object.entries(zip.files)){if(f.dir)continue;const lower=path.toLowerCase();if(lower.endsWith('/usercache.json')||lower==='usercache.json')entries.push({path,text:await f.async('string')});else if(new RegExp('(?:^|/)(?:players/)?advancements/'+uuidRE+'\\.json$','i').test(path)||new RegExp('(?:^|/)(?:players/)?stats/'+uuidRE+'\\.json$','i').test(path))entries.push({path,text:await f.async('string')});else if(lower.endsWith('/level.dat')||lower==='level.dat')entries.push({path,bytes:await f.async('uint8array')})}}else{for(const f of files){const path=f.webkitRelativePath||f.name,lower=path.toLowerCase();if(lower.endsWith('/usercache.json')||lower==='usercache.json')entries.push({path,text:await f.text()});else if(new RegExp('(?:^|/)(?:players/)?(?:advancements|stats)/'+uuidRE+'\\.json$','i').test(path))entries.push({path,text:await f.text()});else if(lower.endsWith('/level.dat')||lower==='level.dat')entries.push({path,bytes:new Uint8Array(await f.arrayBuffer())})}}return entries}
+  function getRecords(data){const entries=data.adv||{};return catalog.map(meta=>{const p=entries['minecraft:'+meta.id]||entries[meta.id]||null,criteria=p?.criteria||{},keys=new Set(Object.entries(criteria).filter(([,v])=>v!==null&&v!==undefined&&v!==false).map(([k])=>k));const done=p?.done===true;const criterionDone=c=>keys.has(c.key)||keys.has('minecraft:'+c.key)||[...keys].some(k=>k.replace(/^minecraft:/,'')===c.key.replace(/^minecraft:/,''));const nDone=meta.criteria.filter(criterionDone).length;return{...meta,progress:p,done,criterionDone,nDone,started:!done&&nDone>0}})}
+  function render(data){records=getRecords(data);renderInlineStats(data);$('worldname').textContent=data.world;$('treeWelcome').classList.add('hidden');$('playerSummary').textContent=`${data.playerName||'Игрок'} · ${data.world}`;$('progressLabel').textContent=`${records.filter(x=>x.done).length} из ${records.length}`;renderProgress();renderAchievements()}
+  const numberFmt=value=>Number(value||0).toLocaleString('ru-RU');
+  function getCustomStat(root,key){return Number(root?.['minecraft:custom']?.[`minecraft:${key}`]||0)}
+  function formatPlayTime(ticks){const totalMinutes=Math.max(0,Math.floor(Number(ticks||0)/1200)),hours=Math.floor(totalMinutes/60),minutes=totalMinutes%60;return hours?`${numberFmt(hours)} ч ${minutes} мин`:`${minutes} мин`}
+  function renderInlineStats(data){
+    const root=data.stats?.stats||{},has=!!data.hasStats;
+    const deaths=has?numberFmt(getCustomStat(root,'deaths')):'—';
+    const playTicks=Math.max(getCustomStat(root,'play_time'),getCustomStat(root,'play_one_minute'));
+    const playerTime=has?formatPlayTime(playTicks):'—';
+    const worldTicks=data.level?.Time ?? root['minecraft:custom']?.['minecraft:total_world_time'];
+    const worldDays=worldTicks!==undefined&&worldTicks!==null?`${numberFmt(Math.floor(Math.max(0,Number(worldTicks))/24000))} дн.`:'—';
+    $('metricDeaths').textContent=deaths;
+    $('metricPlayerTime').textContent=playerTime;
+    $('metricWorldTime').textContent=worldDays;
+    $('inlineWorldMetrics').classList.toggle('has-data',has||worldTicks!==undefined&&worldTicks!==null);
+  }
+
+  function stateOf(a){return a.done?'done':a.started?'started':'locked'}
+  function renderProgress(){const done=records.filter(x=>x.done).length,pct=Math.round(done/(catalog.length||126)*100);$('percent').textContent=pct+'%';$('ring').style.setProperty('--progress',pct*3.6+'deg');$('progressBar').style.width=pct+'%';$('progressLabel').textContent=`${done} из ${catalog.length||126}`;}
+  function renderTabs(){
+    $('gameTabs').innerHTML=categoryOrder.map(id=>{const root=catalog.find(a=>a.id===id+'/root')||catalog.find(a=>a.category===id);const icon=id==='minecraft'?iconMarkup('Grass Block','inventory',29):(root?iconMarkup(root.iconName,'inventory',29):'◈');return `<button class="game-tab ${!showAllTrees&&activeCategory===id?'active':''}" data-category="${id}" title="${categories[id]}"><span class="game-tab-icon">${icon}</span><span>${categories[id]}</span></button>`}).join('')+`<button class="game-tab all-tab ${showAllTrees?'active':''}" data-all="1" title="Все достижения"><span class="all-tab-icon">✦</span><span>Все</span></button>`;
+    document.querySelectorAll('[data-category]').forEach(b=>b.onclick=()=>{activeCategory=b.dataset.category;showAllTrees=false;renderTabs();renderAchievements()});
+    document.querySelector('[data-all]').onclick=()=>{showAllTrees=true;renderTabs();renderAchievements()};
+  }
+  // Achievement graph: layered by real catalog parents, drawn on canvas.
+  const graphImages = new Map();
+  let graphRaf = 0, graphState = {nodes:[], visible:null, zoom:1, x:0, y:0, hover:null, related:new Set(), drag:null, started:0, duration:0, allMode:false, viewTarget:null, lastFrame:0};
+  const graphCanvas = $('treeCanvas'), graphCtx = graphCanvas.getContext('2d');
+  // Shared motion timings for every achievement category.
+  const graphStep = 52, graphNodeMs = 430, graphEdgeMs = 510;
+  const graphClamp = (v,a,b)=>Math.max(a,Math.min(b,v));
+  const graphEase = t=>1-Math.pow(1-t,3);
+  let graphDpr = Math.min(devicePixelRatio||1,2);
+  let inventoryImage = new Image(); inventoryImage.onload=()=>graphKick(); inventoryImage.src = iconLibraries.inventory.url;
+  const extraImages = new Map();
+  function graphIcon(n){
+    const lib=iconLibraries.inventory, iconName=String(n.iconName||'');
+    const pos=lib.positions[iconName]??Object.entries(lib.positions).find(([key])=>key.toLowerCase()===iconName.toLowerCase())?.[1];
+    if(!pos){const src=iconName.toLowerCase()==='nautilus'?'./assets/extra-items/nautilus_spawn_egg.png':iconLibraries.extraInventory?.[iconName.toLowerCase()];if(src){let im=extraImages.get(src);if(!im){im=new Image();im.onload=graphKick;im.src=src;extraImages.set(src,im)}return {image:im,extra:true}}}
+    const atlasPos=pos??lib.fallbackPosition;
+    if(!atlasPos)return null;
+    const idx=atlasPos-1,cols=lib.width/lib.size,zoom=lib.zoom||1;
+    return {image:inventoryImage,sx:(idx%cols)*lib.size*zoom,sy:Math.floor(idx/cols)*lib.size*zoom,sw:lib.size*zoom,sh:lib.size*zoom};
+  }
+  function layoutAchievementGraph(nodes, radialAll=false){
+    const ids=nodes.map(n=>n.id),known=new Set(ids),parents=new Map(),children=new Map(ids.map(id=>[id,[]]));
+    for(const n of nodes){const p=String(n.parent||'').replace(/^minecraft:/,'');parents.set(n.id,known.has(p)?[p]:[]);if(known.has(p))children.get(p).push(n.id)}
+    if(!radialAll){
+      const col=new Map();
+      function getCol(id,trail=new Set()){if(col.has(id))return col.get(id);if(trail.has(id))return 0;trail.add(id);const ps=parents.get(id)||[];const d=ps.length?Math.max(...ps.map(p=>getCol(p,trail)+1)):0;trail.delete(id);col.set(id,d);return d}
+      ids.forEach(id=>getCol(id));
+      const layers=[];for(const id of ids)(layers[col.get(id)]||=[]).push(id);
+      const order=new Map(),sync=l=>layers[l].forEach((id,i)=>order.set(id,i));layers.forEach((_,i)=>sync(i));
+      for(let pass=0;pass<6;pass++){const down=pass%2===0,seq=layers.map((_,i)=>i).filter(i=>down?i>0:i<layers.length-1);if(!down)seq.reverse();for(const l of seq){const score=new Map(layers[l].map(id=>{const adj=down?parents.get(id):children.get(id);return[id,adj.length?adj.reduce((sum,p)=>sum+(order.get(p)||0),0)/adj.length:(order.get(id)||0)]}));layers[l].sort((a,b)=>score.get(a)-score.get(b));sync(l)}}
+      const crossbow=['adventure/arbalistic','adventure/two_birds_one_arrow','adventure/whos_the_pillager_now'];
+      for(const layer of layers){const group=crossbow.filter(id=>layer.includes(id));if(group.length>1){const first=Math.min(...group.map(id=>layer.indexOf(id))),rest=layer.filter(id=>!group.includes(id));rest.splice(first,0,...group);layer.splice(0,layer.length,...rest);sync(layers.indexOf(layer))}}
+      const y=new Map(),rowGap=76;layers.forEach(layer=>{let prev=-Infinity;for(const id of layer){const ps=(parents.get(id)||[]).filter(p=>y.has(p));const wanted=ps.length?ps.reduce((sum,p)=>sum+y.get(p),0)/ps.length:(prev===-Infinity?0:prev+rowGap);const py=Math.max(wanted,prev+rowGap);y.set(id,py);prev=py}});
+      const vals=[...y.values()],mid=vals.length?(Math.min(...vals)+Math.max(...vals))/2:0;
+      const positions=new Map(ids.map(id=>[id,{x:col.get(id)*138,y:y.get(id)-mid,depth:col.get(id),r:25,angle:0,radius:col.get(id)*138}]));
+      if(nodes[0]?.category==='minecraft'){
+        const anchor='story/smelt_iron',byIdLocal=new Map(nodes.map(n=>[n.id,n]));
+        if(byIdLocal.has(anchor)){
+          const direct=new Map(ids.map(id=>[id,[]]));for(const n of nodes){const p=String(n.parent||'').replace(/^minecraft:/,'');if(direct.has(p))direct.get(p).push(n.id)}
+          const placed=new Set([anchor]),route=new Map([[anchor,0]]),dist=new Map([[anchor,0]]),step=138;
+          let cursor=anchor,up=0;
+          while(true){const p=String(byIdLocal.get(cursor)?.parent||'').replace(/^minecraft:/,'');if(!p||!byIdLocal.has(p)||placed.has(p))break;up++;positions.set(p,{x:-up*step,y:0,depth:up,r:25,angle:Math.PI,radius:up*step});placed.add(p);route.set(p,Math.PI);dist.set(p,up);cursor=p}
+          const queue=[anchor];
+          while(queue.length){const parent=queue.shift(),base=route.get(parent)||0,kids=(direct.get(parent)||[]).filter(id=>!placed.has(id));if(!kids.length)continue;
+            let angles;
+            if(parent===anchor){const hint={'story/obtain_armor':-Math.PI/2,'story/iron_tools':Math.PI/2,'story/lava_bucket':0};angles=kids.map((id,i)=>hint[id]??(base+(i-(kids.length-1)/2)*.62))}
+            else{const spread=Math.min(.92,.48+kids.length*.13);angles=kids.map((_,i)=>base+(kids.length===1?0:(i-(kids.length-1)/2)*spread))}
+            kids.forEach((id,i)=>{const angle=angles[i],d=(dist.get(parent)||0)+1;positions.set(id,{x:(positions.get(parent)?.x||0)+step*Math.cos(angle),y:(positions.get(parent)?.y||0)+step*Math.sin(angle),depth:d,r:25,angle,radius:d*step});route.set(id,angle);dist.set(id,d);placed.add(id);queue.push(id)})
+          }
+        }
+      }
+      return positions;
+    }
+    const crossbowOrder=['adventure/arbalistic','adventure/two_birds_one_arrow','adventure/whos_the_pillager_now'];
+    for(const list of children.values())list.sort((a,b)=>{const ia=crossbowOrder.indexOf(a),ib=crossbowOrder.indexOf(b);return ia>=0&&ib>=0?ia-ib:0});
+    const roots=ids.filter(id=>!parents.get(id).length).sort((a,b)=>categoryOrder.indexOf(byId.get(a)?.category)-categoryOrder.indexOf(byId.get(b)?.category));
+    const sizeMemo=new Map();
+    function subtreeSize(id,trail=new Set()){if(sizeMemo.has(id))return sizeMemo.get(id);if(trail.has(id))return 1;trail.add(id);const cs=children.get(id)||[];const size=1+cs.reduce((s,c)=>s+subtreeSize(c,trail),0);trail.delete(id);sizeMemo.set(id,size);return size}
+    const assigned=new Map(),angles=new Map(),depth=new Map(),rootAngle=new Map();
+    const TAU=Math.PI*2, gap=.09;
+    function spread(id,a0,a1,d){const mid=(a0+a1)/2;angles.set(id,mid);depth.set(id,d);const kids=children.get(id)||[];if(!kids.length)return;const inner=(a1-a0)*.94,start=mid-inner/2,total=kids.reduce((s,k)=>s+subtreeSize(k),0)||1;let cursor=start;for(const child of kids){const span=inner*subtreeSize(child)/total;spread(child,cursor,cursor+span,d+1);cursor+=span}}
+    if(radialAll&&roots.length>1){const available=TAU-roots.length*gap,total=roots.reduce((s,id)=>s+subtreeSize(id),0)||1;let cursor=-Math.PI/2;for(const root of roots){const span=available*subtreeSize(root)/total,mid=cursor+span/2;rootAngle.set(root,mid);const childStart=cursor+gap/2,childEnd=cursor+span-gap/2;angles.set(root,mid);depth.set(root,0);const kids=children.get(root)||[];const inner=(childEnd-childStart)*.94,kStart=mid-inner/2,kTotal=kids.reduce((s,k)=>s+subtreeSize(k),0)||1;let kCursor=kStart;for(const child of kids){const width=inner*subtreeSize(child)/kTotal;spread(child,kCursor,kCursor+width,1);kCursor+=width}cursor+=span+gap}}
+    else if(roots.length){const root=roots[0],a0=-Math.PI,a1=Math.PI;angles.set(root,0);depth.set(root,0);const kids=children.get(root)||[],inner=TAU*.94,total=kids.reduce((s,k)=>s+subtreeSize(k),0)||1;let cursor=-inner/2;for(const child of kids){const span=inner*subtreeSize(child)/total;spread(child,cursor,cursor+span,1);cursor+=span}}
+    const byDepth=new Map();for(const id of ids){const d=depth.get(id)??0;if(!byDepth.has(d))byDepth.set(d,[]);byDepth.get(d).push(id)}
+    let priorRadius=radialAll?138:0;
+    for(const [d,layer] of [...byDepth.entries()].sort((a,b)=>a[0]-b[0])){
+      if(d===0){for(const id of layer){const a=rootAngle.get(id);assigned.set(id,radialAll&&roots.length>1?{x:priorRadius*Math.cos(a),y:priorRadius*Math.sin(a),depth:0,r:27,angle:a,radius:priorRadius}:{x:0,y:0,depth:0,r:31,angle:0,radius:0})}continue}
+      const sorted=layer.slice().sort((a,b)=>angles.get(a)-angles.get(b));let minDelta=TAU;
+      for(let i=1;i<sorted.length;i++)minDelta=Math.min(minDelta,angles.get(sorted[i])-angles.get(sorted[i-1]));
+      const category=nodes[0]?.category;
+      const husbandry=category==="husbandry";
+      const adventure=category==="adventure";
+      // Nodes at the two ends of a circular layer are neighbours too; include
+      // that seam for every radial category, not just the visible first/last pair.
+      if(sorted.length>1)minDelta=Math.min(minDelta,TAU-(angles.get(sorted.at(-1))-angles.get(sorted[0])));
+      // Adventure has a dense first ring, so give that category extra clearance.
+      // These values are centre-to-centre distances, including each node's diameter.
+      const minCenterGap=adventure?78:husbandry?70:70;
+      // A single node has no angular neighbour. Treating its gap as TAU makes
+      // sin(TAU/2) almost zero and sends that level millions of pixels away.
+      const required=sorted.length>1?minCenterGap/(2*Math.sin(Math.max(.025,minDelta/2))):0;
+      const radius=Math.max(priorRadius+(husbandry?84:adventure?108:96),required,d*(husbandry?94:adventure?112:108));
+      for(const id of layer){const angle=angles.get(id);assigned.set(id,{x:radius*Math.cos(angle),y:radius*Math.sin(angle),depth:d,r:d===1?24:20,angle,radius})}priorRadius=radius;
+    }
+    return assigned;
+  }
+
+  // The "All" view has its own radial layout. Category views deliberately keep
+  // the existing layout above so their established geometry does not change.
+  function layoutAllAchievementGraph(nodes){
+    const ids=nodes.map(n=>n.id),nodeById=new Map(nodes.map(n=>[n.id,n])),order=new Map(ids.map((id,i)=>[id,i]));
+    const known=new Set(ids),children=new Map(ids.map(id=>[id,[]])),parent=new Map();
+    for(const n of nodes){const p=String(n.parent||'').replace(/^minecraft:/,'');parent.set(n.id,known.has(p)?p:null);if(known.has(p))children.get(p).push(n.id)}
+    for(const list of children.values())list.sort((a,b)=>order.get(a)-order.get(b));
+    const roots=ids.filter(id=>!parent.get(id)).sort((a,b)=>categoryOrder.indexOf(nodeById.get(a)?.category)-categoryOrder.indexOf(nodeById.get(b)?.category));
+    const weights=new Map();
+    function weight(id,trail=new Set()){
+      if(weights.has(id))return weights.get(id);
+      if(trail.has(id))return 1;
+      const next=new Set(trail);next.add(id);const value=1+(children.get(id)||[]).reduce((sum,k)=>sum+weight(k,next),0);weights.set(id,value);return value;
+    }
+    ids.forEach(id=>weight(id));
+    const angle=new Map(),depth=new Map(),TAU=Math.PI*2,sectorGap=.075;
+    function placeBranch(id,a0,a1,d){
+      const mid=(a0+a1)/2;angle.set(id,mid);depth.set(id,d);
+      const kids=children.get(id)||[];if(!kids.length)return;
+      const inner=(a1-a0)*.94,start=mid-inner/2,total=kids.reduce((sum,k)=>sum+weight(k),0)||1;let cursor=start;
+      for(const child of kids){const span=inner*weight(child)/total;placeBranch(child,cursor,cursor+span,d+1);cursor+=span}
+    }
+    const available=Math.max(.1,TAU-roots.length*sectorGap),total=roots.reduce((sum,id)=>sum+weight(id),0)||1;let cursor=-Math.PI/2;
+    for(const root of roots){
+      const span=available*weight(root)/total,mid=cursor+span/2;angle.set(root,mid);depth.set(root,0);
+      const kids=children.get(root)||[];
+      if(kids.length){const inner=span*.92,start=mid-inner/2,kidsTotal=kids.reduce((sum,k)=>sum+weight(k),0)||1;let at=start;for(const child of kids){const childSpan=inner*weight(child)/kidsTotal;placeBranch(child,at,at+childSpan,1);at+=childSpan}}
+      cursor+=span+sectorGap;
+    }
+    // Keep every level on an expanded orbit. The minimum chord distance is
+    // calculated from its angular spacing instead of being artificially capped.
+    const layers=new Map();for(const id of ids){const d=depth.get(id)??0;if(!layers.has(d))layers.set(d,[]);layers.get(d).push(id)}
+    const positions=new Map();let previousRadius=64;
+    for(const [d,layer] of [...layers.entries()].sort((a,b)=>a[0]-b[0])){
+      if(d===0){for(const id of layer){const a=angle.get(id)||0;positions.set(id,{x:previousRadius*Math.cos(a),y:previousRadius*Math.sin(a),depth:0,r:18,angle:a,radius:previousRadius})}continue}
+      const sorted=layer.slice().sort((a,b)=>angle.get(a)-angle.get(b));let minDelta=TAU;
+      if(sorted.length>1){for(let i=0;i<sorted.length;i++){const current=angle.get(sorted[i]),next=angle.get(sorted[(i+1)%sorted.length]);const delta=(next-current+TAU)%TAU;if(delta>1e-5)minDelta=Math.min(minDelta,delta)}}
+      if(!Number.isFinite(minDelta)||minDelta===TAU)minDelta=TAU;
+      const desiredChord=40;
+      const required=sorted.length>1?desiredChord/(2*Math.sin(Math.max(.003,minDelta/2))):0;
+      const preferred=138+(d-1)*66;
+      const radius=Math.max(preferred,previousRadius+66,required);
+      for(const id of layer){const a=angle.get(id)||0,n=nodeById.get(id),r=d===1?13:(n?.frame==='challenge'||n?.frame==='goal'?12:11);positions.set(id,{x:radius*Math.cos(a),y:radius*Math.sin(a),depth:d,r,angle:a,radius})}
+      previousRadius=radius;
+    }
+    return positions;
+  }
+
+  // This experience intentionally runs its motion even when Windows/browser advertises reduced motion.
+  const graphReducedMotion=false;
+  function graphKick(){if(!graphRaf)graphRaf=requestAnimationFrame(drawAchievementGraph)}
+  function setGraphView(zoom,x,y,animate=true){
+    const next={zoom:graphClamp(zoom,graphState.allMode ? .08 : .2,2.6),x,y};
+    if(animate&&!graphReducedMotion)graphState.viewTarget=next;else{graphState.zoom=next.zoom;graphState.x=next.x;graphState.y=next.y;graphState.viewTarget=null}
+    graphKick();
+  }
+  function fitAchievementGraph(){
+    const r=graphCanvas.getBoundingClientRect(),ns=graphState.nodes;if(!ns.length)return;const pad=graphState.allMode?34:48;let zoom,x,y;
+    if(graphState.centerOnOrigin){let mx=1,my=1;for(const n of ns){mx=Math.max(mx,Math.abs(n.x)+n.r);my=Math.max(my,Math.abs(n.y)+n.r)}zoom=graphClamp(Math.min((r.width/2-pad)/mx,(r.height/2-pad)/my),graphState.allMode ? .08 : .16,1.18);x=r.width/2;y=r.height/2}
+    else{let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;for(const n of ns){x0=Math.min(x0,n.x-n.r);x1=Math.max(x1,n.x+n.r);y0=Math.min(y0,n.y-n.r);y1=Math.max(y1,n.y+n.r)}const bw=x1-x0,bh=y1-y0;zoom=graphClamp(Math.min((r.width-2*pad)/bw,(r.height-2*pad)/bh),.16,1.18);x=r.width/2-(x0+x1)/2*zoom;y=r.height/2-(y0+y1)/2*zoom}
+    setGraphView(zoom,x,y,true);
+  }
+  function drawAchievementGraph(now){
+    graphRaf=0;now=now||performance.now();
+    let viewMoving=false;
+    if(graphState.viewTarget){const dt=Math.min(48,Math.max(8,now-(graphState.lastFrame||now-16))),f=1-Math.exp(-dt/82),target=graphState.viewTarget;graphState.zoom+=(target.zoom-graphState.zoom)*f;graphState.x+=(target.x-graphState.x)*f;graphState.y+=(target.y-graphState.y)*f;viewMoving=Math.abs(target.zoom-graphState.zoom)>.0007||Math.abs(target.x-graphState.x)>.12||Math.abs(target.y-graphState.y)>.12;if(!viewMoving){graphState.zoom=target.zoom;graphState.x=target.x;graphState.y=target.y;graphState.viewTarget=null}}
+    graphState.lastFrame=now;
+    const c=graphCanvas,ctx=graphCtx,r=c.getBoundingClientRect(),dpr=graphDpr;if(c.width!==Math.round(r.width*dpr)||c.height!==Math.round(r.height*dpr)){c.width=Math.round(r.width*dpr);c.height=Math.round(r.height*dpr)}
+    const {nodes,zoom,x,y,visible}=graphState,allMode=!!graphState.allMode,elapsed=now-graphState.started,step=graphReducedMotion?0:graphStep,nodeMs=graphReducedMotion?1:graphNodeMs,edgeMs=graphReducedMotion?1:graphEdgeMs;
+    ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,c.width,c.height);
+    // A restrained ambient particle field adds depth without affecting graph geometry.
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    for(let i=0;i<22;i++){
+      const seed=i*12.9898+78.233,drift=now*.000012*(i%3+1),px=((Math.sin(seed)*.5+.5)*r.width+Math.sin(drift+seed)*13),py=((Math.cos(seed*1.7)*.5+.5)*r.height-Math.cos(drift+seed)*15),alpha=.045+.055*(.5+.5*Math.sin(now*.0011+seed));
+      ctx.save();ctx.globalAlpha=alpha;ctx.beginPath();ctx.arc(px,py,i%6===0?1.35:.85,0,Math.PI*2);ctx.fillStyle=i%4===0?'#ffc36a':'#ef7180';ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=7;ctx.fill();ctx.restore();
+    }
+    ctx.setTransform(dpr*zoom,0,0,dpr*zoom,dpr*x,dpr*y);ctx.lineCap='round';
+    if(allMode){const ambient=ctx.createRadialGradient(0,0,0,0,0,620);ambient.addColorStop(0,'rgba(148,36,54,.14)');ambient.addColorStop(.58,'rgba(92,24,39,.055)');ambient.addColorStop(1,'rgba(34,13,20,0)');ctx.fillStyle=ambient;ctx.fillRect(-1100,-1100,2200,2200)}
+    const byId=new Map(nodes.map(n=>[n.id,n]));
+    for(const n of nodes){
+      const p=String(n.parent||'').replace(/^minecraft:/,''),a=byId.get(p);if(!a)continue;
+      const parentDelay=a.motionDelay??a.depth*step,raw=graphClamp((elapsed-parentDelay-nodeMs*.48)/edgeMs,0,1);if(!raw)continue;const t=1-Math.pow(1-raw,2);
+      const dx=n.x-a.x,dy=n.y-a.y,len=Math.max(1,Math.hypot(dx,dy)),ux=dx/len,uy=dy/len,x0=a.x+ux*(a.r-1),y0=a.y+uy*(a.r-1),x1=n.x-ux*(n.r-1),y1=n.y-uy*(n.r-1),bx=x0+(x1-x0)*.35,by=y0+(y1-y0)*.35,ex=x0+(x1-x0)*.65,ey=y0+(y1-y0)*.65,hot=graphState.related.has(a.id)&&graphState.related.has(n.id);
+      ctx.save();ctx.globalAlpha=visible&&(!visible.has(a.id)||!visible.has(n.id))?(allMode ? .16 : .17):1;ctx.beginPath();ctx.moveTo(x0,y0);ctx.bezierCurveTo(bx,by,ex,ey,x0+(x1-x0)*t,y0+(y1-y0)*t);
+      ctx.lineWidth=allMode?(hot?1.9:1.05):(hot?2.5:1.45);
+      const edgeDone=a.done&&n.done,edgeStarted=!edgeDone&&(a.started||n.started||a.done||n.done),edgeColor=edgeDone?'rgba(245,195,72,.72)':edgeStarted?'rgba(255,151,61,.62)':'rgba(232,77,91,.34)',hotColor=n.done?'rgba(244,200,79,.98)':n.started?'rgba(255,150,61,.98)':'rgba(239,82,103,.95)';ctx.strokeStyle=hot?hotColor:edgeColor;
+      ctx.shadowColor=hot?hotColor:'transparent';ctx.shadowBlur=hot?10:0;ctx.stroke();ctx.restore();
+      if(raw>=1&&((n.phase*1000|0)%3!==0)){
+        const travel=(now*.000055+n.phase)%1,px=x0+(x1-x0)*travel,py=y0+(y1-y0)*travel,particle=(a.done&&n.done)?'#f4c84f':(a.started||n.started||a.done||n.done)?'#ff963d':'#ef5267';ctx.save();ctx.globalAlpha=(a.done&&n.done)?.46:(a.started||n.started||a.done||n.done)?.34:.19;ctx.beginPath();ctx.arc(px,py,1.55,0,Math.PI*2);ctx.fillStyle=particle;ctx.shadowColor=particle;ctx.shadowBlur=7;ctx.fill();ctx.restore();
+      }
+    }
+    for(const n of nodes){
+      const progress=graphClamp((elapsed-(n.motionDelay??n.depth*step))/nodeMs,0,1);if(!progress)continue;
+      const eased=1-Math.pow(1-progress,3),k=Math.min(1.055,eased+Math.sin(progress*Math.PI)*.045),alpha=progress;
+      const status=n.done?'done':n.started?'started':'locked',color=status==='done'?'#f4c84f':status==='started'?'#ff963d':'#ef5267',hov=graphState.hover===n.id,related=graphState.related.has(n.id);
+      const pulse=!graphReducedMotion?(.5+.5*Math.sin(now*.00125+(n.phase||0)*Math.PI*2)):0;
+      const visibilityAlpha=visible&&!visible.has(n.id) ? .2 : 1;
+      ctx.save();ctx.globalAlpha=alpha*visibilityAlpha;ctx.translate(n.x,n.y);const scale=(.72+.28*k)*(hov?1.12:related?1.045:1);ctx.scale(scale,scale);
+      if(status!=='locked'||related){ctx.beginPath();ctx.arc(0,0,n.r+(status==='done'?3:2)+(pulse*1.5),0,Math.PI*2);ctx.lineWidth=status==='done'?1.5:1;ctx.strokeStyle=status==='done'?`rgba(244,200,79,${.20+pulse*.22})`:status==='started'?`rgba(255,150,61,${.17+pulse*.2})`:`rgba(239,82,103,${.06+pulse*.06})`;ctx.stroke()}
+      ctx.shadowColor=related?'#ff7482':color;ctx.shadowBlur=hov?20:related?14:status==='done'?9+pulse*5:status==='started'?8+pulse*4:2+pulse*1.5
+      ctx.beginPath();ctx.arc(0,0,n.r,0,Math.PI*2);ctx.fillStyle=allMode?'rgba(34,17,24,.97)':'rgba(30,18,24,.96)';ctx.fill();ctx.shadowBlur=0;ctx.lineWidth=hov?2.6:related?2:allMode?1.3:1.5;ctx.strokeStyle=color;ctx.stroke();
+      const icon=graphIcon(n),iconSize=Math.round(n.r*1.45);ctx.imageSmoothingEnabled=false;ctx.globalAlpha=alpha*visibilityAlpha*(status==='locked' ? .58 : 1);
+      if(icon?.extra){if(icon.image.complete&&icon.image.naturalWidth)ctx.drawImage(icon.image,-iconSize/2,-iconSize/2,iconSize,iconSize)}
+      else if(icon&&icon.image.complete&&icon.image.naturalWidth){ctx.filter=status==='locked'?'grayscale(1) brightness(.76)':'none';ctx.drawImage(icon.image,icon.sx,icon.sy,icon.sw,icon.sh,-iconSize/2,-iconSize/2,iconSize,iconSize);ctx.filter='none'}
+      else{ctx.globalAlpha=alpha*visibilityAlpha;ctx.fillStyle=color;ctx.font='bold 14px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(n.title?.[0]||'?',0,1)}
+      ctx.restore();
+    }
+    const revealActive=elapsed<graphState.duration,motionActive=graphState.nodes.length>0&&!graphReducedMotion&&document.visibilityState==='visible';
+    if(revealActive||viewMoving||motionActive)graphKick();
+  }
+  function renderAchievements(){
+    const list=records.filter(a=>showAllTrees||a.category===activeCategory),filtered=list.filter(a=>stateFilter==='all'||stateOf(a)===stateFilter);
+    $('treeWelcome').classList.toggle('hidden',!!filtered.length);$('treeWelcome').textContent=records.length?'В этой вкладке нет достижений с выбранным фильтром.':'Загрузи папку мира или ZIP — реальные достижения появятся на своих местах.';
+    $('treeTitle').textContent=showAllTrees?'Все достижения':categories[activeCategory];$('treeCount').textContent=`${filtered.length} из ${records.length||catalog.length} достижений`;
+    $('treeStatus').textContent=records.length?`${filtered.filter(a=>a.done).length} получено · ${filtered.filter(a=>a.started).length} в процессе`:'Загрузи мир, чтобы увидеть прогресс';
+    const radial=showAllTrees||['nether','adventure','husbandry'].includes(activeCategory);
+    const layout=showAllTrees?layoutAllAchievementGraph(list):layoutAchievementGraph(list,radial);const motionLayers=new Map();for(const n of list){const p=layout.get(n.id);if(!p)continue;n.x=p.x;n.y=p.y;n.depth=p.depth;n.r=p.r;n.angle=p.angle;n.radius=p.radius;if(!motionLayers.has(n.depth))motionLayers.set(n.depth,[]);motionLayers.get(n.depth).push(n);let h=2166136261;for(let i=0;i<n.id.length;i++){h^=n.id.charCodeAt(i);h=Math.imul(h,16777619)}n.phase=(h>>>0)/4294967295}for(const [depth,layer] of motionLayers){layer.sort((a,b)=>radial?(a.angle-b.angle):(a.y-b.y||a.x-b.x));layer.forEach((n,i)=>{n.motionDelay=depth*graphStep+i*13})}
+    graphState.nodes=list;graphState.allMode=showAllTrees;graphState.centerOnOrigin=radial||activeCategory==='minecraft';graphState.visible=stateFilter==='all'?null:new Set(filtered.map(n=>n.id));graphState.hover=null;graphState.related=new Set();graphState.viewTarget=null;graphState.lastFrame=0;graphState.started=performance.now();graphState.duration=list.length?(graphReducedMotion?0:Math.max(...list.map(n=>(n.motionDelay??n.depth*graphStep)+graphNodeMs+graphEdgeMs))):0;$('treeViewport').classList.toggle('all-mode',showAllTrees);
+    const box=$('treeViewport').getBoundingClientRect();graphCanvas.width=Math.round(box.width*graphDpr);graphCanvas.height=Math.round(box.height*graphDpr);
+    if(list.length){fitAchievementGraph();}else graphKick();
+  }
+  graphCanvas.addEventListener('pointerdown',e=>{graphState.viewTarget=null;graphCanvas.setPointerCapture(e.pointerId);graphState.drag={x:e.clientX,y:e.clientY,moved:0};graphCanvas.style.cursor='grabbing'});
+  graphCanvas.addEventListener('pointermove',e=>{const r=graphCanvas.getBoundingClientRect(),p={x:e.clientX-r.left,y:e.clientY-r.top};if(graphState.drag){const dx=e.clientX-graphState.drag.x,dy=e.clientY-graphState.drag.y;graphState.drag.moved+=Math.abs(dx)+Math.abs(dy);graphState.drag.x=e.clientX;graphState.drag.y=e.clientY;graphState.x+=dx;graphState.y+=dy;graphKick();return}const wx=(p.x-graphState.x)/graphState.zoom,wy=(p.y-graphState.y)/graphState.zoom;const hit=graphState.nodes.find(n=>(!graphState.visible||graphState.visible.has(n.id))&&Math.hypot(n.x-wx,n.y-wy)<n.r+6);if(hit?.id!==graphState.hover){graphState.hover=hit?.id||null;graphState.related=new Set();if(hit){graphState.related.add(hit.id);const parent=String(hit.parent||'').replace(/^minecraft:/,'');if(parent)graphState.related.add(parent);for(const n of graphState.nodes)if(String(n.parent||'').replace(/^minecraft:/,'')===hit.id)graphState.related.add(n.id)}graphCanvas.style.cursor=hit?'pointer':'grab';graphKick()}});
+  graphCanvas.addEventListener('pointerup',e=>{const d=graphState.drag;graphState.drag=null;graphCanvas.style.cursor='grab';if(d&&d.moved<5){const r=graphCanvas.getBoundingClientRect(),wx=(e.clientX-r.left-graphState.x)/graphState.zoom,wy=(e.clientY-r.top-graphState.y)/graphState.zoom,n=graphState.nodes.find(a=>(!graphState.visible||graphState.visible.has(a.id))&&Math.hypot(a.x-wx,a.y-wy)<a.r+6);if(n)openDetail(n)}});
+  graphCanvas.addEventListener('wheel',e=>{e.preventDefault();const r=graphCanvas.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,base=graphState.viewTarget||{zoom:graphState.zoom,x:graphState.x,y:graphState.y},nextZoom=graphClamp(base.zoom*Math.exp(-e.deltaY*.0012),graphState.allMode ? .08 : .2,2.6),k=nextZoom/base.zoom;setGraphView(nextZoom,px-(px-base.x)*k,py-(py-base.y)*k,true)},{passive:false});
+  new ResizeObserver(()=>{graphDpr=Math.min(devicePixelRatio||1,2);if(graphState.nodes.length)fitAchievementGraph();else graphKick()}).observe($('treeViewport'));
+  $('zoomOut').onclick=()=>{const b=graphState.viewTarget||graphState;setGraphView(b.zoom/1.2,b.x,b.y,true)};$('zoomIn').onclick=()=>{const b=graphState.viewTarget||graphState;setGraphView(b.zoom*1.2,b.x,b.y,true)};$('zoomFit').onclick=fitAchievementGraph;
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&graphState.nodes.length)graphKick()});
+
+  const criterionTranslations = {
+    "arbalistic": "Пять мобов одним выстрелом из арбалета",
+    "avoid vibration": "Скрытное передвижение рядом со скалком",
+    "blowback": "Победа над вихрем его зарядом ветра",
+    "brush armadillo": "Щиток броненосца получен кистью",
+    "bullseye": "Попадание в центр мишени",
+    "pot crafted using only sherds": "Ваза создана только из черепков",
+    "crafter crafted crafter": "Сборщик изготовил другой сборщик",
+    "fall from world height": "Падение с верхней границы мира",
+    "place creaking heart awake": "Скрипцевина в активном состоянии",
+    "place creaking heart dormant": "Скрипцевина в неактивном состоянии",
+    "place pale oak log": "Бревно бледного дуба размещено",
+    "honey block slide": "Скольжение по блоку мёда",
+    "kill mob near sculk catalyst": "Моб убит рядом со скалковым катализатором",
+    "lighten up": "Окисление медной лампы очищено",
+    "lightning rod with villager no fire": "Крестьянин защищён громоотводом без пожара",
+    "minecraft trials edition": "Вход в испытательную палату",
+    "shot crossbow": "Выстрел из арбалета",
+    "overoverkill": "Мощный удар булавой",
+    "play jukebox in meadows": "Проигрыватель включён на цветочных лугах",
+    "revaulting": "Зловещее хранилище открыто",
+    "killed by something": "Победа получена после подходящего боевого события",
+    "killed something": "Моб побеждён",
+    "desert pyramid": "Пустынная пирамида",
+    "desert well": "Пустынный колодец",
+    "has sherd": "Глиняный черепок получен",
+    "ocean ruin cold": "Холодные океанские руины",
+    "ocean ruin warm": "Тёплые океанские руины",
+    "trail ruins common": "Обычная находка в руинах тропы",
+    "trail ruins rare": "Редкая находка в руинах тропы",
+    "shot arrow": "Попадание стрелой",
+    "slept in bed": "Сон в кровати",
+    "killed skeleton": "Скелет побеждён",
+    "spear many mobs": "Пять мобов поражены таранным ударом",
+    "spyglass at dragon": "Эндер-дракон осмотрен через подзорную трубу",
+    "spyglass at ghast": "Гаст осмотрен через подзорную трубу",
+    "spyglass at parrot": "Попугай осмотрен через подзорную трубу",
+    "summoned golem": "Железный голем создан",
+    "shot trident": "Попадание трезубцем",
+    "used totem": "Тотем бессмертия использован",
+    "traded": "Сделка с крестьянином совершена",
+    "trade at world height": "Торговля на максимальной высоте мира",
+    "armor trimmed minecraft:rib armor trim smithing template smithing trim": "Шаблон отделки «Ребро» применён",
+    "armor trimmed minecraft:silence armor trim smithing template smithing trim": "Шаблон отделки «Тишина» применён",
+    "armor trimmed minecraft:snout armor trim smithing template smithing trim": "Шаблон отделки «Рыло» применён",
+    "armor trimmed minecraft:spire armor trim smithing template smithing trim": "Шаблон отделки «Шпиль» применён",
+    "armor trimmed minecraft:tide armor trim smithing template smithing trim": "Шаблон отделки «Прилив» применён",
+    "armor trimmed minecraft:vex armor trim smithing template smithing trim": "Шаблон отделки «Вредина» применён",
+    "armor trimmed minecraft:ward armor trim smithing template smithing trim": "Шаблон отделки «Хранитель» применён",
+    "armor trimmed minecraft:wayfinder armor trim smithing template smithing trim": "Шаблон отделки «Искатель» применён",
+    "armor trimmed minecraft:bolt armor trim smithing template smithing trim": "Шаблон отделки «Вихрь» применён",
+    "armor trimmed minecraft:coast armor trim smithing template smithing trim": "Шаблон отделки «Берег» применён",
+    "armor trimmed minecraft:dune armor trim smithing template smithing trim": "Шаблон отделки «Дюна» применён",
+    "armor trimmed minecraft:eye armor trim smithing template smithing trim": "Шаблон отделки «Око» применён",
+    "armor trimmed minecraft:flow armor trim smithing template smithing trim": "Шаблон отделки «Поток» применён",
+    "armor trimmed minecraft:host armor trim smithing template smithing trim": "Шаблон отделки «Хозяин» применён",
+    "armor trimmed minecraft:raiser armor trim smithing template smithing trim": "Шаблон отделки «Подъём» применён",
+    "armor trimmed minecraft:sentry armor trim smithing template smithing trim": "Шаблон отделки «Часовой» применён",
+    "armor trimmed minecraft:shaper armor trim smithing template smithing trim": "Шаблон отделки «Формовщик» применён",
+    "armor trimmed minecraft:wild armor trim smithing template smithing trim": "Шаблон отделки «Дикая» применён",
+    "two birds": "Два фантома побеждены одним выстрелом",
+    "under lock and key": "Хранилище открыто ключом испытаний",
+    "use lodestone": "Компас привязан к магнетиту",
+    "struck villager": "Крестьянин поражён молнией",
+    "voluntary exile": "Главарь разбойников побеждён",
+    "walk on powder snow with leather boots": "Прогулка по рыхлому снегу в кожаных ботинках",
+    "who needs rockets": "Подъём на заряде ветра",
+    "kill pillager": "Разбойник побеждён",
+    "entered end gateway": "Вход через шлюз Энда",
+    "in city": "Вход в город Энда",
+    "killed dragon": "Эндер-дракон побеждён",
+    "levitated": "Подъём под действием левитации",
+    "summoned dragon": "Эндер-дракон возрождён",
+    "entered end": "Вход в Энд",
+    "allay deliver cake to note block": "Тихоня доставила торт к нотному блоку",
+    "allay deliver item to player": "Тихоня принесла предмет игроку",
+    "bred": "Животные дали потомство",
+    "all black": "Чёрная кошка",
+    "black": "Чёрно-белая кошка",
+    "british shorthair": "Британская короткошёрстная кошка",
+    "calico": "Кошка окраса калико",
+    "jellie": "Кошка Джелли",
+    "persian": "Персидская кошка",
+    "ragdoll": "Кошка рэгдолл",
+    "red": "Рыжая кошка",
+    "siamese": "Сиамская кошка",
+    "tabby": "Полосатая кошка",
+    "white": "Белая кошка",
+    "feed snifflet": "Нюхачонок накормлен",
+    "froglights": "Кваклампы собраны",
+    "kill axolotl target": "Аксолотль помог победить цель",
+    "cold": "Холодная лягушка",
+    "temperate": "Умеренная лягушка",
+    "warm": "Тёплая лягушка",
+    "make a sign glow": "Текст таблички стал светящимся",
+    "obtain sniffer egg": "Яйцо нюхача получено",
+    "place dried ghast in water": "Высохший гаст помещён в воду",
+    "remove wolf armor": "Броня снята с волка",
+    "repair wolf armor": "Волчья броня починена",
+    "ride a boat with a goat": "Поездка в лодке с козой",
+    "consumed item": "Предмет пищи съеден",
+    "safely harvest honey": "Мёд собран без нападения пчёл",
+    "silk touch nest": "Гнездо перенесено с «Шёлковым касанием»",
+    "tamed animal": "Животное приручено",
+    "give tnt directly": "TNT передан серному кубу напрямую",
+    "pick up dropped tnt": "Серный куб поднял выброшенный TNT",
+    "wax off": "Воск с медного блока снят",
+    "wax on": "На медный блок нанесён воск",
+    "ashen": "Пепельный волк",
+    "chestnut": "Каштановый волк",
+    "pale": "Бледный волк",
+    "rusty": "Рыжий волк",
+    "snowy": "Снежный волк",
+    "spotted": "Пятнистый волк",
+    "striped": "Полосатый волк",
+    "woods": "Лесной волк",
+    "all effects": "Все эффекты одновременно",
+    "charge respawn anchor": "Якорь возрождения полностью заряжен",
+    "distract piglin": "Пиглин отвлечён золотом",
+    "distract piglin directly": "Золото передано пиглину напрямую",
+    "travelled": "Путешествие через Незер засчитано",
+    "bastion": "Бастион найден",
+    "fortress": "Крепость Незера найдена",
+    "loot bastion bridge": "Сундук в мостовой части бастиона обыскан",
+    "loot bastion hoglin stable": "Сундук в хоглин-стойле бастиона обыскан",
+    "loot bastion other": "Сундук в другой части бастиона обыскан",
+    "loot bastion treasure": "Сокровищница бастиона обыскана",
+    "netherite armor": "Полный комплект незеритовой брони получен",
+    "killed ghast": "Гаст побеждён",
+    "used warped fungus on a stick": "Удочка с искажённым грибом использована",
+    "ride entity distance": "Необходимое расстояние на лавомерке пройдено",
+    "entered nether": "Вход в Незер",
+    "summoned": "Визер призван",
+    "cured zombie": "Крестьянин-зомби исцелён",
+    "deflected projectile": "Снаряд отражён щитом",
+    "enchanted item": "Предмет зачарован",
+    "in stronghold": "Крепость найдена",
+    "get stone": "Камень добыт",
+    "iron": "Железный слиток получен"
+};
+  const achievementGuides = {
+    "story/root": "Собери древесину, сделай верстак из четырёх досок и поставь его в мире.",
+    "story/smelt_iron": "Добудь сырое железо и переплавь его в печи или плавильной печи. Забери готовый слиток.",
+    "story/mine_stone": "Сделай деревянную кирку и добудь блок камня. Убедись, что кирка подходит для добычи камня.",
+    "story/upgrade_tools": "Собери три булыжника и две палки, затем изготовь каменную кирку на верстаке.",
+    "story/iron_tools": "Изготовь железную кирку из трёх железных слитков и двух палок.",
+    "story/obtain_armor": "Собери и получи полный комплект железной брони: шлем, нагрудник, поножи и ботинки.",
+    "story/lava_bucket": "Возьми пустое ведро и нажми им на неподвижный источник лавы, чтобы набрать лаву.",
+    "story/form_obsidian": "Преврати источник лавы в обсидиан, направив на него воду. Для добычи самого блока используй алмазную кирку.",
+    "story/mine_diamond": "Найди алмазную руду и добудь её железной киркой или киркой более высокого уровня.",
+    "story/shiny_gear": "Получи все четыре части алмазной брони: шлем, нагрудник, поножи и ботинки.",
+    "story/enchant_item": "Поставь стол зачаровывания, положи в него предмет и лазурит, затем выбери любое зачарование.",
+    "story/deflect_arrow": "Возьми щит в руку и заблокируй им стрелу или другой отражаемый снаряд.",
+    "story/cure_zombie_villager": "Наложи на крестьянина-зомби слабость, затем используй на нём золотое яблоко. Дождись окончания превращения.",
+    "story/follow_ender_eye": "Бросай око Эндера и двигайся в направлении его полёта, пока не найдёшь крепость.",
+    "story/enter_the_nether": "Построй портал из обсидиана, зажги его огнивом и войди внутрь.",
+    "story/enter_the_end": "Найди крепость, активируй все рамки портала оком Эндера и войди в портал Энда.",
+    "nether/root": "Построй и активируй портал Незера, затем перейди через него из обычного мира.",
+    "nether/find_bastion": "Исследуй Незер, найди развалины бастиона и войди в их структуру.",
+    "nether/find_fortress": "Отыщи крепость Незера и зайди внутрь. Обычно её длинные мосты и башни заметны издалека.",
+    "nether/obtain_ancient_debris": "Ищи древние обломки глубоко в Незере и добудь хотя бы один блок.",
+    "nether/obtain_crying_obsidian": "Получи плачущий обсидиан, например из сундука бастиона или при обмене с пиглином.",
+    "nether/get_wither_skull": "Убивай визер-скелетов в крепости Незера, пока один из них не оставит череп.",
+    "nether/obtain_blaze_rod": "Найди и убей ифрита в крепости Незера, чтобы получить огненный стержень.",
+    "nether/return_to_sender": "Дождись огненного шара гаста, отбей его обратно в гаста и добей моба этим же снарядом.",
+    "nether/uneasy_alliance": "Проведи гаста через портал в обычный мир и убей его уже на той стороне.",
+    "nether/loot_bastion": "Найди сундук в бастионе и открой его. Ниже перечислены типы бастионов, в которых засчитывается добыча.",
+    "nether/distract_piglin": "Брось золотой слиток рядом с пиглином или передай золото ему напрямую, чтобы он отвлёкся на предмет.",
+    "nether/ride_strider": "Оседлай лавомерку, возьми удочку с искажённым грибом и используй её, чтобы управлять движением.",
+    "nether/all_potions": "Выпей зелья разных типов так, чтобы эффекты всех требуемых зелий действовали одновременно.",
+    "nether/all_effects": "Одновременно получи каждый эффект из списка игры. Используй зелья, маяки и другие источники эффектов.",
+    "nether/charge_respawn_anchor": "Находясь в Незере, используй светокамень на якоре возрождения четыре раза, пока он не заполнится.",
+    "nether/netherite_armor": "Улучши алмазные шлем, нагрудник, поножи и ботинки до незеритовых на кузнечном столе.",
+    "nether/create_beacon": "Собери маяк, поставь его на основание из блоков ресурсов и активируй.",
+    "nether/create_full_beacon": "Построй под маяком максимальную пирамиду из четырёх уровней блоков ресурсов и включи маяк.",
+    "nether/fast_travel": "Используй пару порталов между Незером и обычным миром: расстояние в Незере соответствует восьми блокам обычного мира.",
+    "nether/explore_nether": "Посети все пять биомов Незера. Отмечай выполненные биомы в списке критериев ниже.",
+    "nether/summon_wither": "Собери Т-образную конструкцию из песка душ или почвы душ и установи сверху три черепа визер-скелета.",
+    "nether/brew_potion": "Свари любое зелье на варочной стойке: добавь ингредиент к бутылочке с водой и дождись завершения варки.",
+    "end/root": "Найди крепость, активируй портал и впервые войди в измерение Энда.",
+    "end/kill_dragon": "Победи Эндер-дракона на главном острове Энда.",
+    "end/dragon_breath": "Возьми пустые стеклянные бутылочки и собери ими облако драконьего дыхания возле дракона.",
+    "end/dragon_egg": "После победы над драконом подбери яйцо на портале выхода. При необходимости используй поршень или факел.",
+    "end/elytra": "Найди город Энда с кораблём и забери элитры из рамки внутри корабля.",
+    "end/enter_end_gateway": "Войди в портал-шлюз, появившийся после победы над драконом. Обычно в него попадают с помощью жемчуга Эндера.",
+    "end/find_end_city": "Пройди через шлюз на внешние острова Энда и найди город Энда.",
+    "end/levitate": "Позволь шалкеру попасть в тебя снарядом и поднимайся под действием левитации, пока высота подъёма не достигнет 50 блоков.",
+    "end/respawn_dragon": "Поставь по одному кристаллу Энда на каждую из четырёх сторон портала выхода, чтобы возродить дракона.",
+    "adventure/root": "Выполняй исследовательские и боевые действия: открывай новые места, встречай существ и побеждай противников.",
+    "adventure/adventuring_time": "Посети каждый биом из списка критериев. Для засчёта достаточно побывать в каждом из них хотя бы один раз.",
+    "adventure/arbalistic": "Зачаруй арбалет на «Пронзание», выстрой пять разных мобов в одну линию и убей их одним выстрелом.",
+    "adventure/avoid_vibration": "Присядь и осторожно пройди рядом со скалковым датчиком или хранителем, не вызвав обнаружение.",
+    "adventure/blowback": "Отбей заряд ветра вихря обратно в него и нанеси им смертельный урон.",
+    "adventure/brush_armadillo": "Возьми кисть и используй её на броненосце, чтобы получить щиток.",
+    "adventure/bullseye": "Отойди от блока-мишени минимум на 30 блоков и попади снарядом точно в центральную красную точку.",
+    "adventure/craft_decorated_pot_using_only_sherds": "Собери четыре глиняных черепка и объедини их на верстаке в узорчатую вазу; не заменяй черепки кирпичами.",
+    "adventure/crafters_crafting_crafters": "Поставь сборщик и загрузи в него рецепт ещё одного сборщика. Находись рядом в момент изготовления.",
+    "adventure/fall_from_world_height": "Поднимись к верхней границе мира и спустись до самого низа, пережив падение. Подготовь безопасное приземление заранее.",
+    "adventure/heart_transplanter": "Установи скрипцевину между двумя брёвнами бледного дуба так, чтобы блок был правильно ориентирован; проверь все три критерия ниже.",
+    "adventure/hero_of_the_village": "Запусти и успешно отбей набег разбойников в деревне. После победы получишь эффект «Герой деревни».",
+    "adventure/honey_block_slide": "Подойди к вертикальной стороне блока мёда и скользи вниз по его поверхности, чтобы замедлить падение.",
+    "adventure/kill_a_mob": "Победи хотя бы одного враждебного моба из списка. Это базовое боевое достижение, а не требование убить всех перечисленных существ.",
+    "adventure/kill_all_mobs": "По очереди найди и победи каждый вид моба из списка критериев. Проверяй список — для завершения нужны все пункты.",
+    "adventure/kill_mob_near_sculk_catalyst": "Поставь или найди скалковый катализатор, заманивай к нему моба и убей его рядом с блоком.",
+    "adventure/lighten_up": "Найди окисленную медную лампу и проведи по ней топором, чтобы снять слой окисления.",
+    "adventure/lightning_rod_with_villager_no_fire": "Поставь громоотвод рядом с крестьянином во время грозы. Молния должна попасть в громоотвод, не вызвав пожар.",
+    "adventure/minecraft_trials_edition": "Найди вход в испытательные палаты и войди внутрь.",
+    "adventure/ol_betsy": "Заряжай арбалет, возьми болт или стрелу и выстрели из него.",
+    "adventure/overoverkill": "Используй булаву для атаки с большой высоты: удар должен нанести не менее 50 сердец урона за один раз.",
+    "adventure/play_jukebox_in_meadows": "Найди биом цветочных лугов, поставь проигрыватель и вставь в него любую музыкальную пластинку.",
+    "adventure/read_power_of_chiseled_bookshelf": "Поставь компаратор рядом с резной книжной полкой и считай её сигнал красного камня.",
+    "adventure/revaulting": "Найди зловещее хранилище в испытательной палате, получи зловещий ключ испытаний и открой его.",
+    "adventure/salvage_sherd": "Найди подозрительный песок или гравий в руинах и аккуратно очисти его кистью, пока не выпадет черепок.",
+    "adventure/shoot_arrow": "Попади стрелой в любого моба или другого подходящего игрового персонажа.",
+    "adventure/sleep_in_bed": "Поставь кровать и поспать в ней ночью или во время грозы, чтобы установить точку возрождения.",
+    "adventure/sniper_duel": "Отойди от скелета более чем на 50 блоков и убей его выстрелом из лука или арбалета.",
+    "adventure/spear_many_mobs": "Собери пять мобов перед собой и порази их одним таранным рывком копья.",
+    "adventure/spyglass_at_dragon": "Возьми подзорную трубу, наведи её на Эндер-дракона и посмотри на него через прицел.",
+    "adventure/spyglass_at_ghast": "Возьми подзорную трубу и наведи прицел на гаста.",
+    "adventure/spyglass_at_parrot": "Возьми подзорную трубу и наведи прицел на попугая.",
+    "adventure/summon_iron_golem": "Поставь четыре железных блока в Т-образной форме и заверши конструкцию вырезанной тыквой или светильником Джека.",
+    "adventure/throw_trident": "Попади трезубцем в моба или цель. После броска трезубец можно вернуть с помощью зачарования «Верность».",
+    "adventure/totem_of_undying": "Держи тотем бессмертия в основной или второй руке и переживи смертельный удар — тотем должен сработать.",
+    "adventure/trade": "Открой меню торговли с крестьянином и соверши хотя бы одну сделку.",
+    "adventure/trade_at_world_height": "Подними крестьянина или доберись до него на максимальной высоте мира и соверши с ним сделку.",
+    "adventure/trim_with_all_exclusive_armor_patterns": "На кузнечном столе нанеси на броню каждый из восьми редких шаблонов из списка критериев. Каждый шаблон нужно применить хотя бы раз.",
+    "adventure/trim_with_any_armor_pattern": "Положи броню, шаблон отделки и нужный материал на кузнечный стол, затем создай предмет с отделкой.",
+    "adventure/two_birds_one_arrow": "Зачаруй арбалет на «Пронзание», совмести двух фантомов на одной траектории и убей обоих одним выстрелом.",
+    "adventure/under_lock_and_key": "Получи обычный ключ испытаний, найди хранилище в испытательной палате и открой его.",
+    "adventure/use_lodestone": "Поставь магнетит, возьми компас и используй компас на блоке, чтобы привязать его к магнетиту.",
+    "adventure/very_very_frightening": "Во время грозы направь молнию на крестьянина с помощью трезубца с зачарованием «Громовержец» или громоотвода.",
+    "adventure/voluntary_exile": "Найди главаря разбойников с зловещим знаменем и убей его.",
+    "adventure/walk_on_powder_snow_with_leather_boots": "Надень кожаные ботинки и пройдись по рыхлому снегу — в них персонаж не провалится.",
+    "adventure/who_needs_rockets": "Используй заряд ветра под собой или рядом с собой, чтобы подбросить персонажа вверх минимум на 8 блоков.",
+    "adventure/whos_the_pillager_now": "Убей разбойника выстрелом из арбалета.",
+    "husbandry/root": "Съешь любой продукт питания. Подойдут обычные продукты, приготовленная еда и другие съедобные предметы.",
+    "husbandry/breed_an_animal": "Найди двух взрослых животных одного вида, накорми их подходящей пищей и дождись появления детёныша.",
+    "husbandry/bred_all_animals": "Размножь каждый вид животного из списка: найди двух взрослых особей и накорми их подходящим для размножения предметом.",
+    "husbandry/complete_catalogue": "Найди и приручи все варианты кошек. Для приручения подходи к бездомным кошкам с сырой треской или лососем.",
+    "husbandry/axolotl_in_a_bucket": "Возьми ведро с водой и используй его на аксолотле, чтобы поймать моба внутрь.",
+    "husbandry/balanced_diet": "Съешь каждый продукт из списка критериев. В него входят обычная еда и некоторые опасные для здоровья продукты.",
+    "husbandry/fishy_business": "Поймай любую рыбу удочкой. Забрось леску в воду и вытащи её после поклёвки.",
+    "husbandry/tactical_fishing": "Поймай любую рыбу не удочкой, а ведром с водой. Подойди к рыбе с ведром и используй его на ней.",
+    "husbandry/leash_all_frog_variants": "Найди холодную, умеренную и тёплую разновидности лягушек и привяжи поводок к каждой из них.",
+    "husbandry/froglights": "Получи все три разновидности квакламп: приведи лягушек разных температурных типов к магмовым кубам и дай им съесть маленькие кубы.",
+    "husbandry/kill_axolotl_target": "Сразись с водным мобом рядом с аксолотлем: помоги ему атаковать цель и дождись, пока аксолотль победит её.",
+    "husbandry/allay_deliver_item_to_player": "Дай тихоне предмет, а затем дождись, пока она подберёт такой же предмет и принесёт его тебе.",
+    "husbandry/allay_deliver_cake_to_note_block": "Дай тихоне торт и поставь рядом нотный блок. Активируй нотный блок, чтобы тихоня доставила к нему торт.",
+    "husbandry/feed_snifflet": "Найди нюхачонка и покорми его семенами факельника.",
+    "husbandry/obtain_sniffer_egg": "Ищи подозрительный песок в тёплых океанских руинах и очищай его кистью, пока не получишь яйцо нюхача.",
+    "husbandry/plant_any_sniffer_seed": "Посади семена факельника или стручок кувшинницы, которые нюхач находит при рытье.",
+    "husbandry/plant_seed": "Посади любой подходящий тип семян или ростков из списка критериев. Дождись, пока игра зарегистрирует посадку.",
+    "husbandry/place_dried_ghast_in_water": "Поставь высохшего гаста в воду и оставь его там для восстановления.",
+    "husbandry/safely_harvest_honey": "Поставь зажжённый костёр под ульем или пчелиным гнездом и набери мёд стеклянной бутылочкой, не разозлив пчёл.",
+    "husbandry/silk_touch_nest": "Убедись, что в пчелином гнезде или улье находятся три пчелы, затем сломай блок инструментом с «Шёлковым касанием».",
+    "husbandry/tadpole_in_a_bucket": "Возьми ведро с водой и используй его на головастике, чтобы поймать его.",
+    "husbandry/tame_an_animal": "Приручи подходящее животное: например, волка костями, кошку рыбой или лошадь, укрощая её верхом.",
+    "husbandry/obtain_netherite_hoe": "Положи алмазную мотыгу, незеритовый слиток и нужный шаблон улучшения на кузнечный стол.",
+    "husbandry/remove_wolf_armor": "Подойди к волку в броне и используй ножницы, чтобы снять с него броню.",
+    "husbandry/repair_wolf_armor": "Используй щиток броненосца на повреждённой волчьей броне, чтобы восстановить её прочность.",
+    "husbandry/ride_a_boat_with_a_goat": "Посади козу в лодку вместе с собой и проплыви на ней.",
+    "husbandry/make_a_sign_glow": "Возьми светящийся чернильный мешок и используй его на табличке с текстом.",
+    "husbandry/uh_oh": "Подбрось динамит перед серным кубом или передай его напрямую, чтобы моб подобрал TNT.",
+    "husbandry/wax_on": "Возьми пчелиные соты и используй их на медном блоке, чтобы покрыть его воском.",
+    "husbandry/wax_off": "Возьми топор и соскреби им воск с вощёного медного блока.",
+    "husbandry/whole_pack": "Найди и приручи все девять разновидностей волков из списка критериев.",
+    "nether/ride_strider_in_overworld_lava": "В обычном мире найди большое озеро лавы, оседлай лавомерку и проедь по поверхности на достаточное расстояние."
+};
+  function achievementGuide(a){return achievementGuides[a.id]||`Выполни условие «${a.description||a.title}». Если у достижения несколько пунктов, проверь каждый критерий в списке ниже.`}
+  function openDetail(a){if(!a)return;const doneCrit=a.nDone,total=a.criteria.length,progress=total?`${doneCrit} из ${total} критериев`:(a.done?'Ачивка получена':'Критерии не раскрываются в сохранении'),status=a.done?'Получена':a.started?'В процессе':'Не получена';$('detailHead').innerHTML=`${frameMarkup(a,a.done,true)}<div><div class="eyebrow">${esc(categories[a.category])} · ${a.frame==='challenge'?'ИСПЫТАНИЕ':a.frame==='goal'?'ЦЕЛЬ':'АЧИВКА'}</div><h2 id="detailTitle">${esc(a.title)}</h2><p>${a.done?'Отмечена в сохранении игрока':a.started?'Есть частичный прогресс':'Пока не получена'}</p></div>`;$('detailDescription').textContent=a.description||'Описание не найдено в данных этой версии.';$('detailGuide').textContent=achievementGuide(a);$('detailProgress').textContent=progress;$('detailStatus').textContent=status;$('detailBar').style.width=total?`${doneCrit/total*100}%`:a.done?'100%':'0%';const criteriaSection=$('criteriaSection');if(total){criteriaSection.classList.remove('hidden');$('criteriaTotal').textContent=`${doneCrit}/${total}`;$('criteriaGrid').innerHTML=a.criteria.map(c=>{const yes=a.criterionDone(c),key=String(c.key||'').replace(/^minecraft:/,'');let kind=c.iconKind||'none',iconName=c.iconName,label=String(c.label||c.key);const cats={'all_black':'Чёрная','black':'Чёрно-белая','british_shorthair':'Британская короткошёрстная','calico':'Калико','jellie':'Джелли','persian':'Персидская','ragdoll':'Рэгдолл','red':'Рыжая','siamese':'Сиамская','tabby':'Полосатая','white':'Белая'};const catIcons={'all_black':'black-cat','black':'black-cat','british_shorthair':'british-shorthair-cat','calico':'calico-cat','jellie':'jellie-cat','persian':'persian-cat','ragdoll':'ragdoll-cat','red':'red-cat','siamese':'siamese-cat','tabby':'tabby-cat','white':'white-cat'};const wolves={'ashen':'Пепельный','black':'Чёрный','chestnut':'Каштановый','pale':'Бледный','rusty':'Рыжий','snowy':'Снежный','spotted':'Пятнистый','striped':'Полосатый','woods':'Лесной'};const frogs={'cold':'Холодная','temperate':'Умеренная','warm':'Тёплая'},frogIcons={'cold':'cold-frog','temperate':'temperate-frog','warm':'warm-frog'};if(a.id==='husbandry/complete_catalogue'){kind='entity';iconName=catIcons[key]||'cat';label=cats[key]||label}else if(a.id==='husbandry/whole_pack'){kind='entity';iconName=`wolf-${key}`;label=`Волк: ${wolves[key]||label}`}else if(a.id==='husbandry/leash_all_frog_variants'){kind='entity';iconName=frogIcons[key]||'frog';label=`Лягушка: ${frogs[key]||label}`}else if(a.id==='husbandry/bred_all_animals'){if(key==='chicken')label='Курица';if(key==='rabbit')label='Кролик'}const raw=String(c.label||c.key),translation=criterionTranslations[raw.toLowerCase()]||criterionTranslations[key.toLowerCase()];if(translation)label=translation;else if(/[a-z]/i.test(label))label=label.replace(/^minecraft:/i,'').replaceAll('_',' ').replace(/\b[a-z]/g,ch=>ch.toUpperCase());if(a.id==='husbandry/whole_pack')label=`${wolves[key]||label} волк`;const ic=kind==='none'?`<span>${yes?'✓':'·'}</span>`:iconMarkup(iconName,kind,29);return `<div class="criterion ${yes?'done':''}" title="${esc(c.key)}"><span class="criterion-icon">${ic}</span><span class="criterion-name">${esc(label)}</span></div>`}).join('')}else criteriaSection.classList.add('hidden');const parent=byId.get((a.parent||'').replace(/^minecraft:/,''));$('parentLine').innerHTML=parent?`Родительская ачивка: <b>${esc(parent.title)}</b>`:'';$('detailBackdrop').classList.remove('hidden');$('closeDetail').focus()}
+  $('closeDetail').onclick=()=>$('detailBackdrop').classList.add('hidden');$('detailBackdrop').addEventListener('click',e=>{if(e.target===$('detailBackdrop'))$('detailBackdrop').classList.add('hidden')});
+  const uploadHelpBackdrop=$('uploadHelpBackdrop'),uploadHelpButton=$('uploadHelpBtn');
+  function closeUploadHelp(returnFocus=true){const wasOpen=!uploadHelpBackdrop.classList.contains('hidden');uploadHelpBackdrop.classList.add('hidden');uploadHelpButton.setAttribute('aria-expanded','false');if(wasOpen&&returnFocus)uploadHelpButton.focus()}
+  uploadHelpButton.onclick=()=>{uploadHelpBackdrop.classList.remove('hidden');uploadHelpButton.setAttribute('aria-expanded','true');$('closeUploadHelp').focus()};
+  $('closeUploadHelp').onclick=()=>closeUploadHelp();
+  uploadHelpBackdrop.addEventListener('click',e=>{if(e.target===uploadHelpBackdrop)closeUploadHelp()});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('detailBackdrop').classList.add('hidden');closeUploadHelp()}});
+  renderTabs();
+  // Apply progress filters immediately. The old handler referenced filterMenu/filterToggle
+  // elements that are not present in this layout, throwing before renderAchievements().
+  document.querySelectorAll('[data-filter]').forEach(button=>{
+    button.addEventListener('click',()=>{
+      const nextFilter=button.dataset.filter;
+      if(!['all','locked','started','done'].includes(nextFilter))return;
+      stateFilter=nextFilter;
+      document.querySelectorAll('[data-filter]').forEach(item=>{
+        const selected=item===button;
+        item.classList.toggle('selected',selected);
+        item.setAttribute('aria-pressed',String(selected));
+      });
+      renderAchievements();
+    });
+  });
+  async function loadFiles(ev){const files=[...ev.target.files];if(!files.length)return;notify('Читаю сохранение…');try{const isZip=files.length===1&&/\.zip$/i.test(files[0].name),entries=await readSelected(files,isZip),data=await parseEntries(entries);render(data);notify(`Загружено · ${records.filter(x=>x.done).length} из ${records.length} ачивок`)}catch(err){notify(err.message||'Не удалось прочитать мир')}finally{ev.target.value=''}}
+  $('folderInput').addEventListener('change',loadFiles);$('zipInput').addEventListener('change',loadFiles);
+})();
+</script>
+</body>
+</html>
