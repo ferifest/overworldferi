@@ -140,6 +140,28 @@
     @media(max-width:900px){.inline-world-metrics{order:3;flex-basis:100%;justify-content:flex-start}.inline-filters{margin-left:auto}}
     @media(max-width:560px){.inline-world-metrics{gap:5px;overflow-x:auto;max-width:100%;padding-bottom:2px}.inline-world-metric{padding:6px 7px;font-size:10px}.inline-world-metric b{font-size:10px}.metric-label{white-space:normal}.tree-state-legend{left:8px;bottom:8px;gap:8px;font-size:9px;padding:7px 8px}}
 
+  
+    /* OVERWORLD polish: slightly larger controls, integrated graph heading, low-cost settled canvas. */
+    .redesigned{max-width:1480px;padding:20px 26px 58px}
+    .redesigned .brand{font-size:16px}
+    .world-label{font-size:13px}
+    .progress-copy strong{font-size:20px}
+    .progress-copy span{font-size:12px}
+    .game-tab{font-size:13px;min-height:62px}
+    .game-tab .mc-frame .mc-sprite{width:28px!important;height:28px!important}
+    .inline-filters button{font-size:13px;padding:8px 13px}
+    .inline-world-metric{font-size:12px;padding:7px 10px}
+    .tree-viewport{height:calc(100vh - 292px);min-height:440px;max-height:none}
+    .tree-heading{position:absolute;z-index:3;top:13px;left:19px;right:19px;margin:0;padding:0 2px 10px;min-height:47px;align-items:center;border-bottom:1px solid rgba(154,76,91,.20);pointer-events:none}
+    .tree-heading h1{font-size:23px}
+    .tree-heading>div>span,.tree-status{font-size:12px}
+    .tree-status{padding:0 120px 0 12px;text-align:right}
+    .tree-tools{top:13px;right:13px}
+    .tree-viewport.all-mode:before{animation:none!important}
+    .tree-viewport.all-mode{contain:layout paint;will-change:auto}
+    .nautilus-entity{image-rendering:auto!important;object-fit:contain}
+    @media(max-width:760px){.redesigned{padding:16px 14px 40px}.tree-viewport{height:calc(100vh - 350px);min-height:360px}.tree-heading{left:13px;right:13px;align-items:flex-start;flex-direction:column;gap:2px}.tree-heading h1{font-size:20px}.tree-status{padding:0;text-align:left}.tree-tools{top:10px;right:10px}}
+    @media(max-width:480px){.tree-viewport{height:calc(100vh - 390px);min-height:320px}.tree-heading{top:10px}.tree-heading h1{font-size:18px}.game-tab{font-size:11px;min-height:52px}.inline-filters button{font-size:10px;padding:7px 8px}}
   </style>
 </head>
 <body>
@@ -148,8 +170,8 @@
   <section class="compact-progress"><div class="progress-dial" id="ring"><span id="percent">0%</span></div><div class="progress-copy"><strong id="progressLabel">0 из 126</strong><span id="playerSummary">Загрузи сохранение мира</span></div><div class="inline-world-metrics" id="inlineWorldMetrics" aria-label="Краткая статистика мира"><span class="inline-world-metric"><span class="metric-symbol death-symbol">✕</span><span class="metric-label">Смерти</span><b id="metricDeaths">—</b></span><span class="inline-world-metric"><span class="metric-symbol">◷</span><span class="metric-label">Время игрока</span><b id="metricPlayerTime">—</b></span><span class="inline-world-metric"><span class="metric-symbol">☀</span><span class="metric-label">Время в игре</span><b id="metricWorldTime">—</b></span></div><div class="inline-filters" role="group" aria-label="Фильтр достижений"><button type="button" data-filter="all" class="selected" aria-pressed="true">Все</button><button type="button" data-filter="locked" aria-pressed="false">Осталось</button><button type="button" data-filter="started" aria-pressed="false">В процессе</button><button type="button" data-filter="done" aria-pressed="false">Получены</button></div></section>
   <div class="progress-track"><span id="progressBar"></span></div>
   <nav class="game-tabs" id="gameTabs" aria-label="Вкладки достижений Minecraft"></nav>
-  <div class="tree-heading"><div><h1 id="treeTitle">Дерево достижений</h1><span id="treeCount">126 достижений</span></div><span id="treeStatus" class="tree-status">Загрузи мир, чтобы увидеть прогресс</span></div>
-  <section id="treeViewport" class="tree-viewport glass"><div class="tree-tools"><button id="zoomOut" aria-label="Уменьшить">−</button><button id="zoomFit" aria-label="Вписать дерево">⌖</button><button id="zoomIn" aria-label="Увеличить">+</button></div><canvas id="treeCanvas" class="tree-canvas" aria-label="Интерактивное дерево достижений"></canvas><div class="tree-state-legend" aria-hidden="true"><span><i class="locked-dot"></i>Не получено</span><span><i class="started-dot"></i>В процессе</span><span><i class="done-dot"></i>Получено</span></div><div id="treeWelcome" class="tree-welcome">Загрузи папку мира или ZIP — достижения появятся на своих местах.</div></section>
+  
+  <section id="treeViewport" class="tree-viewport glass"><div class="tree-heading"><div><h1 id="treeTitle">Дерево достижений</h1><span id="treeCount">126 достижений</span></div><span id="treeStatus" class="tree-status">Загрузи мир, чтобы увидеть прогресс</span></div><div class="tree-tools"><button id="zoomOut" aria-label="Уменьшить">−</button><button id="zoomFit" aria-label="Вписать дерево">⌖</button><button id="zoomIn" aria-label="Увеличить">+</button></div><canvas id="treeCanvas" class="tree-canvas" aria-label="Интерактивное дерево достижений"></canvas><div class="tree-state-legend" aria-hidden="true"><span><i class="locked-dot"></i>Не получено</span><span><i class="started-dot"></i>В процессе</span><span><i class="done-dot"></i>Получено</span></div><div id="treeWelcome" class="tree-welcome">Загрузи папку мира или ZIP — достижения появятся на своих местах.</div></section>
   <div class="worldline hidden" id="worldline"><span class="worldicon">◈</span><span id="worldnameProxy"></span><label class="identity">Игрок <input id="playerName" maxlength="16" placeholder="укажите ник" autocomplete="off"></label><span id="playerHint" class="sep"></span></div>
   <section id="statsData" class="hidden"></section><section id="achData" class="hidden"></section>
 </main>
@@ -161,7 +183,7 @@
 (() => {
   const $=id=>document.getElementById(id), catalog=window.OW_CATALOG||[], iconLibraries=window.OW_ICONS||{};
   const categories={minecraft:'Minecraft',nether:'Незер',end:'Энд',adventure:'Приключения',husbandry:'Животноводство'};
-  const nautilusSprite='./nautilus.png';
+  const nautilusSprite=iconLibraries.extraEntities?.nautilus||'./nautilus.png';
   if(iconLibraries.extraEntities)iconLibraries.extraEntities.nautilus=nautilusSprite;
   if(iconLibraries.extraInventory)iconLibraries.extraInventory['bucket of axolotl']='./bucket_of_axolotl.png';
   const categoryOrder=['minecraft','nether','end','adventure','husbandry'];
@@ -177,9 +199,8 @@
     const lib=iconLibraries[kind];if(!lib||!name)return `<span class="mc-sprite mc-fallback" style="width:${size}px;height:${size}px">✦</span>`;
     let key=String(name);if(kind!=='inventory')key=key.toLowerCase().replace(/[ _]+/g,'-');
     if(kind==='entity'){
-      const wolfAsset=iconLibraries.extraEntities?.[key];if(wolfAsset)return `<img class="mc-sprite mc-item-image" alt="" src="${wolfAsset}" style="width:${size}px;height:${size}px">`;
-      const directEntity=iconLibraries.extraEntities?.[key];if(directEntity)return `<img class="mc-sprite mc-item-image" alt="" src="${directEntity}" style="width:${size}px;height:${size}px">`;
-      const nautilusEgg=iconLibraries.extraEntities?.nautilus;if(key==='nautilus'&&nautilusEgg)return `<img class="mc-sprite mc-item-image" alt="Яйцо призыва наутилуса" src="${nautilusEgg}" style="width:${size}px;height:${size}px">`;const aliases={'bogged':'stray','breeze':'vex','camel-husk':'camel','creaking':'shulker','nautilus':'nautilus','parched':'husk','sniffer':'camel','zombie-nautilus':'drowned','all-black':'black-cat','black':'black-cat','british-shorthair':'british-shorthair-cat','calico':'calico-cat','jellie':'jellie-cat','persian':'persian-cat','ragdoll':'ragdoll-cat','red':'red-cat','siamese':'siamese-cat','tabby':'tabby-cat','white':'white-cat'};key=aliases[key]||key;
+      const wolfAsset=iconLibraries.extraEntities?.[key];if(wolfAsset)return `<img class="mc-sprite mc-item-image ${key==='nautilus'?'nautilus-entity':''}" alt="" src="${wolfAsset}" style="width:${size}px;height:${size}px">`;
+      const nautilusEgg=iconLibraries.extraEntities?.nautilus;if(key==='nautilus'&&nautilusEgg)return `<img class="mc-sprite mc-item-image" alt="Яйцо призыва наутилуса" src="${nautilusEgg}" style="width:${size}px;height:${size}px">`;const aliases={'bogged':'stray','breeze':'vex','camel-husk':'camel','creaking':'shulker','nautilus':'nautilus','parched':'husk','sniffer':'camel','zombie-nautilus':'drowned','wolf-ashen':'wolf','wolf-black':'wolf','wolf-chestnut':'wolf','wolf-pale':'wolf','wolf-rusty':'wolf','wolf-snowy':'wolf','wolf-spotted':'wolf','wolf-striped':'wolf','wolf-woods':'wolf','all-black':'black-cat','black':'black-cat','british-shorthair':'british-shorthair-cat','calico':'calico-cat','jellie':'jellie-cat','persian':'persian-cat','ragdoll':'ragdoll-cat','red':'red-cat','siamese':'siamese-cat','tabby':'tabby-cat','white':'white-cat'};key=aliases[key]||key;
     }
     if(kind==='biome'){const custom=iconLibraries.extraBiomes?.[key];if(custom)return `<img class="mc-sprite mc-item-image biome-extra" alt="" src="${custom}" style="width:${size}px;height:${size}px">`}
     const exact=lib.positions[key]??lib.positions[String(name)],byName=exact??Object.entries(lib.positions).find(([k])=>k.toLowerCase()===String(name).toLowerCase())?.[1];
@@ -241,11 +262,12 @@
   const graphStep = 52, graphNodeMs = 430, graphEdgeMs = 510;
   const graphClamp = (v,a,b)=>Math.max(a,Math.min(b,v));
   const graphEase = t=>1-Math.pow(1-t,3);
-  let graphDpr = Math.min(devicePixelRatio||1,2);
+  let graphDpr = Math.min(devicePixelRatio||1,1.5);
   let inventoryImage = new Image(); inventoryImage.onload=()=>graphKick(); inventoryImage.src = iconLibraries.inventory.url;
   const extraImages = new Map();
   function graphIcon(n){
     const lib=iconLibraries.inventory, iconName=String(n.iconName||'');
+    if(iconName.toLowerCase()==='nautilus' && iconLibraries.extraEntities?.nautilus){const src=iconLibraries.extraEntities.nautilus;let im=extraImages.get(src);if(!im){im=new Image();im.onload=graphKick;im.src=src;extraImages.set(src,im)}return {image:im,extra:true,smooth:true}}
     const pos=lib.positions[iconName]??Object.entries(lib.positions).find(([key])=>key.toLowerCase()===iconName.toLowerCase())?.[1];
     if(!pos){const src=iconName.toLowerCase()==='nautilus'?'./nautilus_spawn_egg.png':iconLibraries.extraInventory?.[iconName.toLowerCase()];if(src){let im=extraImages.get(src);if(!im){im=new Image();im.onload=graphKick;im.src=src;extraImages.set(src,im)}return {image:im,extra:true}}}
     const atlasPos=pos??lib.fallbackPosition;
@@ -377,9 +399,9 @@
     graphKick();
   }
   function fitAchievementGraph(){
-    const r=graphCanvas.getBoundingClientRect(),ns=graphState.nodes;if(!ns.length)return;const pad=graphState.allMode?34:48;let zoom,x,y;
-    if(graphState.centerOnOrigin){let mx=1,my=1;for(const n of ns){mx=Math.max(mx,Math.abs(n.x)+n.r);my=Math.max(my,Math.abs(n.y)+n.r)}zoom=graphClamp(Math.min((r.width/2-pad)/mx,(r.height/2-pad)/my),graphState.allMode ? .08 : .16,1.18);x=r.width/2;y=r.height/2}
-    else{let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;for(const n of ns){x0=Math.min(x0,n.x-n.r);x1=Math.max(x1,n.x+n.r);y0=Math.min(y0,n.y-n.r);y1=Math.max(y1,n.y+n.r)}const bw=x1-x0,bh=y1-y0;zoom=graphClamp(Math.min((r.width-2*pad)/bw,(r.height-2*pad)/bh),.16,1.18);x=r.width/2-(x0+x1)/2*zoom;y=r.height/2-(y0+y1)/2*zoom}
+    const r=graphCanvas.getBoundingClientRect(),ns=graphState.nodes;if(!ns.length)return;const pad=graphState.allMode?42:52,headerOffset=58;let zoom,x,y;
+    if(graphState.centerOnOrigin){let mx=1,my=1;for(const n of ns){mx=Math.max(mx,Math.abs(n.x)+n.r);my=Math.max(my,Math.abs(n.y)+n.r)}zoom=graphClamp(Math.min((r.width/2-pad)/mx,(r.height/2-pad-headerOffset/2)/my),graphState.allMode ? .08 : .16,1.18);x=r.width/2;y=(r.height+headerOffset)/2}
+    else{let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;for(const n of ns){x0=Math.min(x0,n.x-n.r);x1=Math.max(x1,n.x+n.r);y0=Math.min(y0,n.y-n.r);y1=Math.max(y1,n.y+n.r)}const bw=x1-x0,bh=y1-y0;zoom=graphClamp(Math.min((r.width-2*pad)/bw,(r.height-2*pad-headerOffset)/bh),.16,1.18);x=r.width/2-(x0+x1)/2*zoom;y=(r.height+headerOffset)/2-(y0+y1)/2*zoom}
     setGraphView(zoom,x,y,true);
   }
   function drawAchievementGraph(now){
@@ -390,12 +412,13 @@
     const c=graphCanvas,ctx=graphCtx,r=c.getBoundingClientRect(),dpr=graphDpr;if(c.width!==Math.round(r.width*dpr)||c.height!==Math.round(r.height*dpr)){c.width=Math.round(r.width*dpr);c.height=Math.round(r.height*dpr)}
     const {nodes,zoom,x,y,visible}=graphState,allMode=!!graphState.allMode,elapsed=now-graphState.started,step=graphReducedMotion?0:graphStep,nodeMs=graphReducedMotion?1:graphNodeMs,edgeMs=graphReducedMotion?1:graphEdgeMs;
     ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,c.width,c.height);
-    // A restrained ambient particle field adds depth without affecting graph geometry.
+    // Ambient particles run only during the entrance sequence; the settled graph is static.
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    for(let i=0;i<22;i++){
-      const seed=i*12.9898+78.233,drift=now*.000012*(i%3+1),px=((Math.sin(seed)*.5+.5)*r.width+Math.sin(drift+seed)*13),py=((Math.cos(seed*1.7)*.5+.5)*r.height-Math.cos(drift+seed)*15),alpha=.045+.055*(.5+.5*Math.sin(now*.0011+seed));
-      ctx.save();ctx.globalAlpha=alpha;ctx.beginPath();ctx.arc(px,py,i%6===0?1.35:.85,0,Math.PI*2);ctx.fillStyle=i%4===0?'#ffc36a':'#ef7180';ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=7;ctx.fill();ctx.restore();
-    }
+    const introActive=elapsed<graphState.duration && document.visibilityState==='visible';
+    if(introActive){const particleCount=allMode?7:10;for(let i=0;i<particleCount;i++){
+      const seed=i*12.9898+78.233,drift=now*.000012*(i%3+1),px=((Math.sin(seed)*.5+.5)*r.width+Math.sin(drift+seed)*9),py=((Math.cos(seed*1.7)*.5+.5)*r.height-Math.cos(drift+seed)*11),alpha=.035+.04*(.5+.5*Math.sin(now*.0011+seed));
+      ctx.save();ctx.globalAlpha=alpha;ctx.beginPath();ctx.arc(px,py,i%6===0?1.2:.75,0,Math.PI*2);ctx.fillStyle=i%4===0?'#ffc36a':'#ef7180';ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=allMode?3:5;ctx.fill();ctx.restore();
+    }}
     ctx.setTransform(dpr*zoom,0,0,dpr*zoom,dpr*x,dpr*y);ctx.lineCap='round';
     if(allMode){const ambient=ctx.createRadialGradient(0,0,0,0,0,620);ambient.addColorStop(0,'rgba(148,36,54,.14)');ambient.addColorStop(.58,'rgba(92,24,39,.055)');ambient.addColorStop(1,'rgba(34,13,20,0)');ctx.fillStyle=ambient;ctx.fillRect(-1100,-1100,2200,2200)}
     const byId=new Map(nodes.map(n=>[n.id,n]));
@@ -407,7 +430,7 @@
       ctx.lineWidth=allMode?(hot?1.9:1.05):(hot?2.5:1.45);
       const edgeDone=a.done&&n.done,edgeStarted=!edgeDone&&(a.started||n.started||a.done||n.done),edgeColor=edgeDone?'rgba(245,195,72,.72)':edgeStarted?'rgba(255,151,61,.62)':'rgba(232,77,91,.34)',hotColor=n.done?'rgba(244,200,79,.98)':n.started?'rgba(255,150,61,.98)':'rgba(239,82,103,.95)';ctx.strokeStyle=hot?hotColor:edgeColor;
       ctx.shadowColor=hot?hotColor:'transparent';ctx.shadowBlur=hot?10:0;ctx.stroke();ctx.restore();
-      if(raw>=1&&((n.phase*1000|0)%3!==0)){
+      if(raw>=1&&elapsed<graphState.duration&&((n.phase*1000|0)%3!==0)){
         const travel=(now*.000055+n.phase)%1,px=x0+(x1-x0)*travel,py=y0+(y1-y0)*travel,particle=(a.done&&n.done)?'#f4c84f':(a.started||n.started||a.done||n.done)?'#ff963d':'#ef5267';ctx.save();ctx.globalAlpha=(a.done&&n.done)?.46:(a.started||n.started||a.done||n.done)?.34:.19;ctx.beginPath();ctx.arc(px,py,1.55,0,Math.PI*2);ctx.fillStyle=particle;ctx.shadowColor=particle;ctx.shadowBlur=7;ctx.fill();ctx.restore();
       }
     }
@@ -415,20 +438,20 @@
       const progress=graphClamp((elapsed-(n.motionDelay??n.depth*step))/nodeMs,0,1);if(!progress)continue;
       const eased=1-Math.pow(1-progress,3),k=Math.min(1.055,eased+Math.sin(progress*Math.PI)*.045),alpha=progress;
       const status=n.done?'done':n.started?'started':'locked',color=status==='done'?'#f4c84f':status==='started'?'#ff963d':'#ef5267',hov=graphState.hover===n.id,related=graphState.related.has(n.id);
-      const pulse=!graphReducedMotion?(.5+.5*Math.sin(now*.00125+(n.phase||0)*Math.PI*2)):0;
+      const pulse=elapsed<graphState.duration?(.5+.5*Math.sin(now*.00125+(n.phase||0)*Math.PI*2)):0;
       const visibilityAlpha=visible&&!visible.has(n.id) ? .2 : 1;
       ctx.save();ctx.globalAlpha=alpha*visibilityAlpha;ctx.translate(n.x,n.y);const scale=(.72+.28*k)*(hov?1.12:related?1.045:1);ctx.scale(scale,scale);
       if(status!=='locked'||related){ctx.beginPath();ctx.arc(0,0,n.r+(status==='done'?3:2)+(pulse*1.5),0,Math.PI*2);ctx.lineWidth=status==='done'?1.5:1;ctx.strokeStyle=status==='done'?`rgba(244,200,79,${.20+pulse*.22})`:status==='started'?`rgba(255,150,61,${.17+pulse*.2})`:`rgba(239,82,103,${.06+pulse*.06})`;ctx.stroke()}
-      ctx.shadowColor=related?'#ff7482':color;ctx.shadowBlur=hov?20:related?14:status==='done'?9+pulse*5:status==='started'?8+pulse*4:2+pulse*1.5
+      ctx.shadowColor=related?'#ff7482':color;ctx.shadowBlur=hov?18:related?10:allMode?(status==='done'?5:status==='started'?4:1):(status==='done'?9+pulse*5:status==='started'?8+pulse*4:2+pulse*1.5)
       ctx.beginPath();ctx.arc(0,0,n.r,0,Math.PI*2);ctx.fillStyle=allMode?'rgba(34,17,24,.97)':'rgba(30,18,24,.96)';ctx.fill();ctx.shadowBlur=0;ctx.lineWidth=hov?2.6:related?2:allMode?1.3:1.5;ctx.strokeStyle=color;ctx.stroke();
-      const icon=graphIcon(n),iconSize=Math.round(n.r*1.45);ctx.imageSmoothingEnabled=false;ctx.globalAlpha=alpha*visibilityAlpha*(status==='locked' ? .58 : 1);
-      if(icon?.extra){if(icon.image.complete&&icon.image.naturalWidth)ctx.drawImage(icon.image,-iconSize/2,-iconSize/2,iconSize,iconSize)}
+      const icon=graphIcon(n),iconSize=Math.round(n.r*1.45);ctx.imageSmoothingEnabled=!!icon?.smooth;ctx.globalAlpha=alpha*visibilityAlpha*(status==='locked' ? .58 : 1);
+      if(icon?.extra){if(icon.image.complete&&icon.image.naturalWidth)ctx.drawImage(icon.image,-iconSize/2,-iconSize/2,iconSize,iconSize);ctx.imageSmoothingEnabled=false}
       else if(icon&&icon.image.complete&&icon.image.naturalWidth){ctx.filter=status==='locked'?'grayscale(1) brightness(.76)':'none';ctx.drawImage(icon.image,icon.sx,icon.sy,icon.sw,icon.sh,-iconSize/2,-iconSize/2,iconSize,iconSize);ctx.filter='none'}
       else{ctx.globalAlpha=alpha*visibilityAlpha;ctx.fillStyle=color;ctx.font='bold 14px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(n.title?.[0]||'?',0,1)}
       ctx.restore();
     }
-    const revealActive=elapsed<graphState.duration,motionActive=graphState.nodes.length>0&&!graphReducedMotion&&document.visibilityState==='visible';
-    if(revealActive||viewMoving||motionActive)graphKick();
+    const revealActive=elapsed<graphState.duration;
+    if(revealActive||viewMoving)graphKick();
   }
   function renderAchievements(){
     const list=records.filter(a=>showAllTrees||a.category===activeCategory),filtered=list.filter(a=>stateFilter==='all'||stateOf(a)===stateFilter);
@@ -436,7 +459,7 @@
     $('treeTitle').textContent=showAllTrees?'Все достижения':categories[activeCategory];$('treeCount').textContent=`${filtered.length} из ${records.length||catalog.length} достижений`;
     $('treeStatus').textContent=records.length?`${filtered.filter(a=>a.done).length} получено · ${filtered.filter(a=>a.started).length} в процессе`:'Загрузи мир, чтобы увидеть прогресс';
     const radial=showAllTrees||['nether','adventure','husbandry'].includes(activeCategory);
-    const layout=showAllTrees?layoutAllAchievementGraph(list):layoutAchievementGraph(list,radial);const motionLayers=new Map();for(const n of list){const p=layout.get(n.id);if(!p)continue;n.x=p.x;n.y=p.y;n.depth=p.depth;n.r=p.r;n.angle=p.angle;n.radius=p.radius;if(!motionLayers.has(n.depth))motionLayers.set(n.depth,[]);motionLayers.get(n.depth).push(n);let h=2166136261;for(let i=0;i<n.id.length;i++){h^=n.id.charCodeAt(i);h=Math.imul(h,16777619)}n.phase=(h>>>0)/4294967295}for(const [depth,layer] of motionLayers){layer.sort((a,b)=>radial?(a.angle-b.angle):(a.y-b.y||a.x-b.x));layer.forEach((n,i)=>{n.motionDelay=depth*graphStep+i*13})}
+    const layout=showAllTrees?layoutAllAchievementGraph(list):layoutAchievementGraph(list,radial);const motionLayers=new Map();for(const n of list){const p=layout.get(n.id);if(!p)continue;n.x=p.x;n.y=p.y;n.depth=p.depth;n.r=p.r;n.angle=p.angle;n.radius=p.radius;if(!motionLayers.has(n.depth))motionLayers.set(n.depth,[]);motionLayers.get(n.depth).push(n);let h=2166136261;for(let i=0;i<n.id.length;i++){h^=n.id.charCodeAt(i);h=Math.imul(h,16777619)}n.phase=(h>>>0)/4294967295}for(const [depth,layer] of motionLayers){layer.sort((a,b)=>radial?(a.angle-b.angle):(a.y-b.y||a.x-b.x));layer.forEach((n,i)=>{n.motionDelay=showAllTrees?depth*30+i*2:depth*graphStep+i*13})}
     graphState.nodes=list;graphState.allMode=showAllTrees;graphState.centerOnOrigin=radial||activeCategory==='minecraft';graphState.visible=stateFilter==='all'?null:new Set(filtered.map(n=>n.id));graphState.hover=null;graphState.related=new Set();graphState.viewTarget=null;graphState.lastFrame=0;graphState.started=performance.now();graphState.duration=list.length?(graphReducedMotion?0:Math.max(...list.map(n=>(n.motionDelay??n.depth*graphStep)+graphNodeMs+graphEdgeMs))):0;$('treeViewport').classList.toggle('all-mode',showAllTrees);
     const box=$('treeViewport').getBoundingClientRect();graphCanvas.width=Math.round(box.width*graphDpr);graphCanvas.height=Math.round(box.height*graphDpr);
     if(list.length){fitAchievementGraph();}else graphKick();
@@ -445,7 +468,7 @@
   graphCanvas.addEventListener('pointermove',e=>{const r=graphCanvas.getBoundingClientRect(),p={x:e.clientX-r.left,y:e.clientY-r.top};if(graphState.drag){const dx=e.clientX-graphState.drag.x,dy=e.clientY-graphState.drag.y;graphState.drag.moved+=Math.abs(dx)+Math.abs(dy);graphState.drag.x=e.clientX;graphState.drag.y=e.clientY;graphState.x+=dx;graphState.y+=dy;graphKick();return}const wx=(p.x-graphState.x)/graphState.zoom,wy=(p.y-graphState.y)/graphState.zoom;const hit=graphState.nodes.find(n=>(!graphState.visible||graphState.visible.has(n.id))&&Math.hypot(n.x-wx,n.y-wy)<n.r+6);if(hit?.id!==graphState.hover){graphState.hover=hit?.id||null;graphState.related=new Set();if(hit){graphState.related.add(hit.id);const parent=String(hit.parent||'').replace(/^minecraft:/,'');if(parent)graphState.related.add(parent);for(const n of graphState.nodes)if(String(n.parent||'').replace(/^minecraft:/,'')===hit.id)graphState.related.add(n.id)}graphCanvas.style.cursor=hit?'pointer':'grab';graphKick()}});
   graphCanvas.addEventListener('pointerup',e=>{const d=graphState.drag;graphState.drag=null;graphCanvas.style.cursor='grab';if(d&&d.moved<5){const r=graphCanvas.getBoundingClientRect(),wx=(e.clientX-r.left-graphState.x)/graphState.zoom,wy=(e.clientY-r.top-graphState.y)/graphState.zoom,n=graphState.nodes.find(a=>(!graphState.visible||graphState.visible.has(a.id))&&Math.hypot(a.x-wx,a.y-wy)<a.r+6);if(n)openDetail(n)}});
   graphCanvas.addEventListener('wheel',e=>{e.preventDefault();const r=graphCanvas.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top,base=graphState.viewTarget||{zoom:graphState.zoom,x:graphState.x,y:graphState.y},nextZoom=graphClamp(base.zoom*Math.exp(-e.deltaY*.0012),graphState.allMode ? .08 : .2,2.6),k=nextZoom/base.zoom;setGraphView(nextZoom,px-(px-base.x)*k,py-(py-base.y)*k,true)},{passive:false});
-  new ResizeObserver(()=>{graphDpr=Math.min(devicePixelRatio||1,2);if(graphState.nodes.length)fitAchievementGraph();else graphKick()}).observe($('treeViewport'));
+  new ResizeObserver(()=>{graphDpr=Math.min(devicePixelRatio||1,graphState.allMode?1.35:1.75);if(graphState.nodes.length)fitAchievementGraph();else graphKick()}).observe($('treeViewport'));
   $('zoomOut').onclick=()=>{const b=graphState.viewTarget||graphState;setGraphView(b.zoom/1.2,b.x,b.y,true)};$('zoomIn').onclick=()=>{const b=graphState.viewTarget||graphState;setGraphView(b.zoom*1.2,b.x,b.y,true)};$('zoomFit').onclick=fitAchievementGraph;
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&graphState.nodes.length)graphKick()});
 
