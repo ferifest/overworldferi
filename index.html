@@ -205,9 +205,26 @@
       .tree-status-counts .status-count{min-width:24px;padding:3px 4px}
       .upload-help{width:26px;height:26px;min-width:26px}
     }
-    body.easter-egg-mode{background-image:url("./prank.jpg")!important;background-position:center center!important;background-size:100% 100%!important;background-repeat:no-repeat!important;background-attachment:fixed!important;background-color:#050505!important}
+    body.easter-egg-mode{background-image:url("./prank.jpg")!important;background-position:center 42%!important;background-size:cover!important;background-repeat:no-repeat!important;background-attachment:fixed!important;background-color:#050505!important}
     body.easter-egg-mode:before{opacity:0!important}
-    body.easter-egg-mode .compact-progress,body.easter-egg-mode .tree-viewport,body.easter-egg-mode .game-tab{backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+    body.easter-egg-mode .compact-progress,body.easter-egg-mode .tree-viewport,body.easter-egg-mode .game-tab{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+
+  
+    /* Final placement: zoom controls stay top-right; status counters sit bottom-left. */
+    .tree-tools{inset:12px!important;top:12px!important;right:12px!important;display:block!important;pointer-events:none}
+    .tree-tool-buttons{position:absolute;top:0;right:0;display:flex;gap:5px;pointer-events:auto}
+    .tree-status-counts{position:absolute;left:0;right:auto;top:auto;bottom:0;display:flex;justify-content:flex-start;gap:6px;pointer-events:auto}
+    .tree-status-counts .status-count{position:relative;cursor:help}
+    .tree-status-counts .status-count[data-tooltip]:hover:after,
+    .tree-status-counts .status-count[data-tooltip]:focus-visible:after{
+      content:attr(data-tooltip);position:absolute;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%);
+      z-index:20;padding:6px 9px;border:1px solid currentColor;border-radius:8px;
+      background:rgba(18,12,16,.96);color:inherit;font-size:11px;font-weight:650;line-height:1.2;
+      white-space:nowrap;box-shadow:0 8px 22px rgba(0,0,0,.35);pointer-events:none
+    }
+    .tree-status-counts .status-count:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+    body.easter-egg-mode{background-size:cover!important;background-position:center 42%!important}
+    body.easter-egg-mode .tree-viewport{background:rgba(18,12,18,.12)!important}
 
   </style>
 </head>
@@ -218,7 +235,7 @@
   <div class="progress-track"><span id="progressBar"></span></div>
   <nav class="game-tabs" id="gameTabs" aria-label="Вкладки достижений Minecraft"></nav>
   
-  <section id="treeViewport" class="tree-viewport glass"><div class="tree-heading"><div><h1 id="treeTitle">Дерево достижений</h1><span id="treeCount">126 достижений</span></div></div><div class="tree-tools"><div class="tree-tool-buttons"><button id="zoomOut" aria-label="Уменьшить">−</button><button id="zoomFit" aria-label="Вписать дерево">⌖</button><button id="zoomIn" aria-label="Увеличить">+</button></div><div id="treeStatus" class="tree-status-counts" role="group" aria-label="Количество достижений по статусам"><span class="status-count locked-count" title="Не получено"><i></i><b id="treeLockedCount">0</b></span><span class="status-count started-count" title="В процессе"><i></i><b id="treeStartedCount">0</b></span><span class="status-count done-count" title="Получено"><i></i><b id="treeDoneCount">0</b></span></div></div><canvas id="treeCanvas" class="tree-canvas" aria-label="Интерактивное дерево достижений"></canvas><div id="treeWelcome" class="tree-welcome">Загрузи папку мира или ZIP — достижения появятся на своих местах.</div></section>
+  <section id="treeViewport" class="tree-viewport glass"><div class="tree-heading"><div><h1 id="treeTitle">Дерево достижений</h1><span id="treeCount">126 достижений</span></div></div><div class="tree-tools"><div class="tree-tool-buttons"><button id="zoomOut" aria-label="Уменьшить">−</button><button id="zoomFit" aria-label="Вписать дерево">⌖</button><button id="zoomIn" aria-label="Увеличить">+</button></div><div id="treeStatus" class="tree-status-counts" role="group" aria-label="Количество достижений по статусам"><span class="status-count locked-count" title="Не получено" data-tooltip="Не получено" aria-label="Не получено"><i></i><b id="treeLockedCount">0</b></span><span class="status-count started-count" title="В процессе" data-tooltip="В процессе" aria-label="В процессе"><i></i><b id="treeStartedCount">0</b></span><span class="status-count done-count" title="Получено" data-tooltip="Получено" aria-label="Получено"><i></i><b id="treeDoneCount">0</b></span></div></div><canvas id="treeCanvas" class="tree-canvas" aria-label="Интерактивное дерево достижений"></canvas><div id="treeWelcome" class="tree-welcome">Загрузи папку мира или ZIP — достижения появятся на своих местах.</div></section>
   <div class="worldline hidden" id="worldline"><span class="worldicon">◈</span><span id="worldnameProxy"></span><label class="identity">Игрок <input id="playerName" maxlength="16" placeholder="укажите ник" autocomplete="off"></label><span id="playerHint" class="sep"></span></div>
   <section id="statsData" class="hidden"></section><section id="achData" class="hidden"></section>
 </main>
