@@ -205,9 +205,7 @@
       .tree-status-counts .status-count{min-width:24px;padding:3px 4px}
       .upload-help{width:26px;height:26px;min-width:26px}
     }
-    body.easter-egg-mode{background-image:url("./prank.jpg")!important;background-position:center 42%!important;background-size:cover!important;background-repeat:no-repeat!important;background-attachment:fixed!important;background-color:#050505!important}
-    body.easter-egg-mode:before{opacity:0!important}
-    body.easter-egg-mode .compact-progress,body.easter-egg-mode .tree-viewport,body.easter-egg-mode .game-tab{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+    /* Easter egg now opens a photo overlay; the site background remains unchanged. */
 
   
     /* Final placement: zoom controls stay top-right; status counters sit bottom-left. */
@@ -226,6 +224,39 @@
     body.easter-egg-mode{background-size:cover!important;background-position:center 42%!important}
     body.easter-egg-mode .tree-viewport{background:rgba(18,12,18,.12)!important}
 
+  
+    /* Restrained animated Nether gradient: one composited layer, no canvas or JS animation loop. */
+    body{position:relative;isolation:isolate;background:#100d12!important}
+    body:after{content:"";position:fixed;z-index:-2;pointer-events:none;inset:-28%;
+      background:
+        radial-gradient(ellipse at 18% 28%,rgba(126,28,49,.25),transparent 38%),
+        radial-gradient(ellipse at 78% 34%,rgba(105,22,43,.20),transparent 42%),
+        radial-gradient(ellipse at 58% 82%,rgba(45,27,53,.24),transparent 42%),
+        radial-gradient(ellipse at 42% 58%,rgba(180,48,63,.10),transparent 34%);
+      transform:translate3d(-2%,0,0) scale(1.02);animation:overworld-gradient-drift 34s ease-in-out infinite alternate;
+      will-change:transform}
+    @keyframes overworld-gradient-drift{0%{transform:translate3d(-2%,-1%,0) scale(1.02)}50%{transform:translate3d(1%,1%,0) scale(1.04)}100%{transform:translate3d(2%,-1%,0) scale(1.02)}}
+    .redesigned{position:relative;z-index:1}
+    .cursor-aura{position:fixed;left:0;top:0;width:250px;height:250px;z-index:0;pointer-events:none;opacity:0;
+      border-radius:50%;background:radial-gradient(circle,rgba(204,61,83,.075) 0%,rgba(204,61,83,.035) 32%,transparent 70%);
+      transition:opacity .35s ease;will-change:transform}
+    .cursor-aura.visible{opacity:1}
+    .easter-egg-backdrop{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:24px;
+      background:rgba(8,6,10,.82);animation:egg-fade-in .22s ease-out}
+    .easter-egg-backdrop[hidden]{display:none!important}
+    .easter-egg-photo-wrap{position:relative;max-width:min(92vw,1000px);max-height:90vh;display:grid;place-items:center}
+    .easter-egg-photo{display:block;max-width:100%;max-height:88vh;width:auto;height:auto;object-fit:contain;
+      border:1px solid rgba(255,255,255,.16);border-radius:14px;box-shadow:0 24px 90px rgba(0,0,0,.58)}
+    .easter-egg-close{position:absolute;z-index:1;right:-13px;top:-13px;width:36px;height:36px;border:1px solid rgba(255,255,255,.22);
+      border-radius:50%;background:#21151b;color:#fff;font-size:23px;line-height:1;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,.4)}
+    @keyframes egg-fade-in{from{opacity:0}to{opacity:1}}
+    @media(hover:none),(pointer:coarse){.cursor-aura{display:none}}
+    @media(prefers-reduced-motion:reduce){
+      body:after{animation:none!important;transform:none!important}
+      .cursor-aura{display:none!important}
+      .easter-egg-backdrop{animation:none!important}
+    }
+
   </style>
 </head>
 <body>
@@ -242,20 +273,41 @@
 <div id="detailBackdrop" class="detail-backdrop hidden" role="presentation"><section class="glass detail" role="dialog" aria-modal="true" aria-labelledby="detailTitle"><div class="detail-top"><div class="detail-title" id="detailHead"></div><button class="close" id="closeDetail" aria-label="Закрыть">×</button></div><div class="detail-desc"><strong>Условие получения</strong><p id="detailDescription"></p></div><div class="detail-guide"><strong>Как выполнить</strong><p id="detailGuide"></p></div><div class="detail-progress"><span id="detailProgress"></span><b id="detailStatus"></b></div><div class="bar"><span id="detailBar"></span></div><div id="criteriaSection" class="hidden"><div class="section-head"><h2>Критерии выполнения</h2><span id="criteriaTotal"></span></div><div class="criteria-grid" id="criteriaGrid"></div></div><div class="parent-line" id="parentLine"></div></section></div>
 <div id="uploadHelpBackdrop" class="detail-backdrop hidden" role="presentation"><section class="glass detail help-dialog" role="dialog" aria-modal="true" aria-labelledby="uploadHelpTitle"><div class="detail-top"><div><div class="eyebrow">СПРАВКА</div><h2 id="uploadHelpTitle">Где найти папку мира или ZIP?</h2></div><button class="close" id="closeUploadHelp" aria-label="Закрыть">×</button></div><div class="help-content"><p><b>Windows (обычный Minecraft):</b> нажми <kbd>Win + R</kbd>, введи <code>%appdata%\.minecraft\saves</code> и нажми Enter. Открой папку нужного мира.</p><p><b>macOS:</b> открой Finder → Перейти к папке и вставь <code>~/Library/Application Support/minecraft/saves</code>.</p><p><b>Linux:</b> открой <code>~/.minecraft/saves</code>. Для некоторых сборок путь к папке Minecraft может отличаться.</p><p><b>Modrinth / другой лаунчер:</b> открой настройки или папку нужного профиля, найди <code>saves</code> и выбери папку своего мира.</p><div class="help-note"><b>Что именно загружать?</b><ol><li>Выбирай папку конкретного мира — внутри обычно находятся <code>level.dat</code>, <code>advancements</code> и <code>stats</code>.</li><li>Чтобы создать ZIP: в Windows нажми правой кнопкой по папке мира → <b>Сжать в ZIP-файл</b> (или «Отправить → Сжатая ZIP-папка»); в macOS выбери <b>Сжать</b>; в Linux — <b>Сжать / Create Archive</b>. Затем выбери получившийся архив через «или ZIP».</li><li>Не выбирай только папку <code>region</code> или отдельные файлы чанков: в них нет прогресса достижений.</li></ol></div><p class="help-foot">Файл обрабатывается локально в браузере и не отправляется на сервер сайта.</p></div></section></div>
 <div class="notice" id="notice" role="status"></div>
+<div class="easter-egg-backdrop" id="easterEggBackdrop" hidden role="dialog" aria-modal="true" aria-label="Секретная фотография">
+  <div class="easter-egg-photo-wrap"><button class="easter-egg-close" id="easterEggClose" type="button" aria-label="Закрыть">×</button><img class="easter-egg-photo" src="./prank.jpg" alt="Секретная фотография"></div>
+</div>
+<div class="cursor-aura" id="cursorAura" aria-hidden="true"></div>
 <script src="./catalog.js"></script><script src="./icons.js"></script><script src="./jszip.min.js"></script>
 <script>
 (() => {
   const $=id=>document.getElementById(id), catalog=window.OW_CATALOG||[], iconLibraries=window.OW_ICONS||{};
   const categories={minecraft:'Minecraft',nether:'Незер',end:'Энд',adventure:'Приключения',husbandry:'Животноводство'};
-  const brandMark=$('brandMark');let brandMarkClicks=0;
+  const brandMark=$('brandMark'), easterEgg=$('easterEggBackdrop'), easterEggClose=$('easterEggClose');let brandMarkClicks=0;
+  function closeEasterEgg(){easterEgg.hidden=true;brandMark.setAttribute('aria-pressed','false');}
   brandMark.addEventListener('click',()=>{
     brandMarkClicks++;
     if(brandMarkClicks>=10){
-      document.body.classList.toggle('easter-egg-mode');
-      brandMark.setAttribute('aria-pressed',String(document.body.classList.contains('easter-egg-mode')));
+      easterEgg.hidden=false;
+      brandMark.setAttribute('aria-pressed','true');
+      easterEggClose.focus();
       brandMarkClicks=0;
     }
   });
+  easterEggClose.addEventListener('click',closeEasterEgg);
+  easterEgg.addEventListener('click',event=>{if(event.target===easterEgg)closeEasterEgg();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!easterEgg.hidden)closeEasterEgg();});
+  const cursorAura=$('cursorAura');
+  if(cursorAura&&window.matchMedia('(pointer:fine)').matches&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    let cursorFrame=0,cursorX=0,cursorY=0;
+    window.addEventListener('pointermove',event=>{
+      cursorX=event.clientX;cursorY=event.clientY;
+      if(!cursorFrame)cursorFrame=requestAnimationFrame(()=>{
+        cursorAura.style.transform='translate3d('+(cursorX-125)+'px,'+(cursorY-125)+'px,0)';
+        cursorAura.classList.add('visible');cursorFrame=0;
+      });
+    },{passive:true});
+    document.documentElement.addEventListener('pointerleave',()=>cursorAura.classList.remove('visible'));
+  }
   const nautilusSprite=iconLibraries.extraEntities?.nautilus||'./nautilus.png';
   if(iconLibraries.extraEntities)iconLibraries.extraEntities.nautilus=nautilusSprite;
   if(iconLibraries.extraInventory)iconLibraries.extraInventory['bucket of axolotl']='./bucket_of_axolotl.png';
